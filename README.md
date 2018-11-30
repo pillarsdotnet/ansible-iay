@@ -20,8 +20,7 @@ Role Variables
 	* `max`: The maximum number of objects which should match the above filter.
   * `build`:
     * `type`: The type of infrastructure object to build.
-	* `args`: A key/value hash describing the object to built.
-
+	* `args`: A key/value hash describing the object to build.
 
 Dependencies
 ------------
