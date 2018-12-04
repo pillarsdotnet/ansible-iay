@@ -19,8 +19,8 @@ Role Variables
 	* `min`: The minimum number of objects which should match the above filter.
 	* `max`: The maximum number of objects which should match the above filter.
   * `build`:
-    * `type`: The type of infrastructure object to build.
-	* `args`: A key/value hash describing the object to build.
+    * `type`: The type of infrastructure to build, if fewer than `min` objects are found, or destroy, if more than `max` objects are found.
+	* `args`: A key/value hash describing the object(s) to build or destroy.
 
 Dependencies
 ------------

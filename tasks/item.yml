@@ -1,0 +1,9 @@
+---
+
+- name: 'Invoke inventory module.'
+  include_tasks: '{{ inventory.module }}'
+  vars:
+    args: '{{ inventory.args }}'
+    filter: '{{ inventory.filter|default(omit) }}'
+    min: '{{ inventory.min }}'
+    max: '{{ inventory.max }}

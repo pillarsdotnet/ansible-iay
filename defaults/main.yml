@@ -1,1 +1,10 @@
 ---
+
+infrastructure_list:
+  build:
+  inventory:
+    args: {}
+    filter: {}
+    max: 1
+    min: 1
+    module: 'ec2_instance_facts'

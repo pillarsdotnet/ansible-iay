@@ -1,1 +1,10 @@
 ---
+
+- name: 'Loop through infrastructure_list variable.'
+  include_tasks: 'item.yml'
+  loop: '{{ infrastructure_list }}'
+  loop_control:
+    loop_var: 'infrastructure_item'
+  vars:
+    build: 'infrastructure_item.build'
+    inventory: 'infrastructure_item.inventory'
