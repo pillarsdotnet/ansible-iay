@@ -3,7 +3,7 @@
 - include_tasks: 'import.yml'
   vars:
     facts:
-      - '{{ i.terraform|dict2items }}'
-    fact: 'value'
+      - '{{ i.terraform.values() }}'
+    fact: 0
     r_id: 'name'
     r_type: 'aws_iam_server_certificate'

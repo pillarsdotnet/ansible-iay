@@ -49,13 +49,12 @@
               when: 'not old'
 
           vars:
-            old: 't_id in ids.keys()'
+            old: '{{ t_id in ids.keys() }}'
 
       vars:
         count: ''
         ids: '{{ r_list|items2dict(
           key_name=t.value.match|default(t.value.arg),
           value_name=r_id) }}'
-        name: '{{ t.key }}'
         t_id: '{{ t.value.yaml[t.value.arg] }}'
       when: 't.value.arg != "count"'

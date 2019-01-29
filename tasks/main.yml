@@ -32,5 +32,7 @@
 - name: 'Run terraform.'
   terraform:
     project_path: '{{ infrastructure_tempdir.path }}'
-    state: 'present'
-  register: 'infastructure_results'
+  register: 'infrastructure_results'
+
+- debug:
+    var: 'infrastructure_results'
