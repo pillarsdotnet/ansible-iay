@@ -1,0 +1,13 @@
+---
+
+- include_tasks: 'import.yml'
+  vars:
+    facts:
+      - '{{ i.terraform|dict2items }}'
+    fact: 'value'
+    r_id: 'arn'
+    r_skip:
+      - 'description'
+      - 'name'
+      - 'name_prefix'
+    r_type: 'aws_iam_policy'

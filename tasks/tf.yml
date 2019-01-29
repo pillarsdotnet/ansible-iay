@@ -1,0 +1,10 @@
+---
+
+- name: 'Write {{ i.file }}.tf file.'
+  copy:
+    content: '{{ yaml|to_nice_json }}'
+    dest: '{{ infrastructure_tempdir.path }}/{{ i.file }}.tf'
+  vars:
+    yaml:
+      resource: '{{ { r_type : dict(key_list|zip(value_list)) } }}'
+  when: 'key_list|count > 0'

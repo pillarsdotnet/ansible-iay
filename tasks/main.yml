@@ -1,10 +1,36 @@
 ---
 
-- name: 'Loop through infrastructure_list variable.'
-  include_tasks: 'item.yml'
-  loop: '{{ infrastructure_list }}'
+- name: 'Make temp directory for terraform run.'
+  tempfile:
+    state: 'directory'
+  register: 'infrastructure_tempdir'
+
+- name: 'Inititialize terraform.'
+  shell: 'terraform init'
+  args:
+    chdir: '{{ infrastructure_tempdir.path }}'
+
+- name: 'Include infrastructure_vars.'
+  include_vars:
+    depth: '{{ item.depth|default(omit) }}'
+    dir: '{{ item.dir|default(omit) }}'
+    extensions: '{{ item.extensions|default(omit) }}'
+    file: '{{ item.file|default(omit) }}'
+    files_matching: '{{ item.files_matching|default(omit) }}'
+    ignore_files: '{{ item.ignore_files|default(omit) }}'
+    ignore_unknown_extensions: '{{ item.ignore_unknown_extensions|default(omit) }}'
+    name: '{{ item.name|default(omit) }}'
+  loop: '{{ infrastructure_vars|default([]) }}'
+  when: 'item is mapping'
+
+- name: 'Loop through infrastructure variable.'
+  include_tasks: '{{ i.task }}.yml'
+  loop: '{{ infrastructure }}'
   loop_control:
-    loop_var: 'infrastructure_item'
-  vars:
-    build: 'infrastructure_item.build'
-    inventory: 'infrastructure_item.inventory'
+    loop_var: 'i'
+
+- name: 'Run terraform.'
+  terraform:
+    project_path: '{{ infrastructure_tempdir.path }}'
+    state: 'present'
+  register: 'infastructure_results'

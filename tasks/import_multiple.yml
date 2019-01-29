@@ -1,0 +1,61 @@
+---
+      
+- block:
+    - name: 'Import {{ t.value.yaml.count }} {{ r_type }} resource(s).'
+      block:
+
+        - include_tasks: 'import_single.yml'
+          loop: '{{ r_list }}'
+          loop_control:
+            loop_var: 'r'
+          vars:
+            id: '{{ r[r_id] }}'
+            count: '[{{ tag|regex_replace(match, replace) }}]'
+          when: 'tag|regex_search(match)'
+
+        - set_fact:
+            skipped: '{{ skipped|combine({t.key : t.value.yaml}) }}'
+
+      vars:
+        match: '{{ t.value.match|default("[^0-9]*[0]*") }}'
+        replace: '{{ t.value.replace|default("") }}'
+        tag: '{{ r.tags[t.value.tag|default("Name")]|default("") }}'
+      when: 't.value.arg == "count"'
+
+    - name: 'Import one {{ r_type }} resource.'
+      block:
+
+        - block:
+
+            - block:
+                - include_tasks: 'import_single.yml'
+                  vars:
+                    id: '{{ ids[t_id] }}'
+
+                - block:
+
+                    - set_fact:
+                        skipped: '{{ skipped|combine(dict(t_keys|zip(t_values))) }}'
+                      vars:
+                        t_values: '{{ t_keys|map("extract", t.value.yaml)|list }}'
+
+                  vars:
+                    t_keys: '{{ t.value.yaml.keys()|intersect(r_skip) }}'
+
+              when: 'old'
+
+            - set_fact:
+                skipped: '{{ skipped|combine({t.key : t.value.yaml}) }}'
+              when: 'not old'
+
+          vars:
+            old: 't_id in ids.keys()'
+
+      vars:
+        count: ''
+        ids: '{{ r_list|items2dict(
+          key_name=t.value.match|default(t.value.arg),
+          value_name=r_id) }}'
+        name: '{{ t.key }}'
+        t_id: '{{ t.value.yaml[t.value.arg] }}'
+      when: 't.value.arg != "count"'

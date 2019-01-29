@@ -1,0 +1,7 @@
+---
+
+- args:
+    chdir: '{{ infrastructure_tempdir.path }}'
+  shell: 'terraform import {{ name }} {{ id }}'
+  vars:
+    name: "'{{ r_type }}.{{ t.key }}{{ count }}'"

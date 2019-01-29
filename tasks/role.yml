@@ -1,0 +1,32 @@
+---
+
+- name: 'Gather iam_role_facts data.'
+  iam_role_facts:
+    aws_access_key: '{{ i.aws_access_key
+                       |default(aws_access_key|default(omit)) }}'
+    aws_secret_key: '{{ i.aws_secret_key
+                       |default(aws_secret_key|default(omit)) }}'
+    ec2_url: '{{ i.ec2_url
+                |default(aws_ec2_url|default(omit)) }}'
+    name: '{{ i.name
+             |default(aws_role_name|default(omit)) }}'
+    path_prefix: '{{ i.path_prefix
+                    |default(aws_role_prefix|default(omit)) }}'
+    profile: '{{ i.profile
+            |default(aws_profile|default(omit)) }}'
+    region: '{{ i.region
+           |default(aws_region|default(omit)) }}'
+    security_token: '{{ i.security_token
+                   |default(aws_security_token|default(omit)) }}'
+    validate_certs: '{{ i.validate_certs
+                   |default(aws_validate_certs|default(omit)) }}'
+  register: 'facts'
+
+- include_tasks: 'import.yml'
+  vars:
+    fact: 'iam_roles'
+    r_id: 'role_name'
+    r_skip:
+      - 'name'
+      - 'name_prefix'
+    r_type: 'aws_iam_role'

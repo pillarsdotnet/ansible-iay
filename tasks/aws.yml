@@ -1,0 +1,15 @@
+---
+
+- name: 'Write the {{ i.file }}.tf file.'
+  copy:
+    content: '{{ yaml|to_nice_json }}'
+    dest: '{{ infrastructure_tempdir.path }}/{{ i.file }}.tf'
+  vars:
+    yaml:
+      provider:
+        aws: '{{ i.yaml }}'
+
+- name: 'Load terraform plugins for aws provider.'
+  args:
+    chdir: '{{ infrastructure_tempdir.path }}'
+  shell: 'terraform init'

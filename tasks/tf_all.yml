@@ -1,0 +1,6 @@
+---
+
+- include_tasks: 'tf.yml'
+  vars:
+    key_list: '{{ i.terraform.keys() }}'
+    value_list: '{{ i.terraform.values()|map(attribute="yaml")|list }}'

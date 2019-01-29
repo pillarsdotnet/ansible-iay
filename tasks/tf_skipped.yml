@@ -1,0 +1,6 @@
+---
+
+- include_tasks: 'tf.yml'
+  vars:
+    key_list: '{{ skipped.keys() }}'
+    value_list: '{{ skipped.values() }}'

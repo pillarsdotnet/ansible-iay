@@ -1,0 +1,16 @@
+---
+
+- set_fact:
+    skipped: {}
+
+- include_tasks: 'tf_all.yml'
+
+- include_tasks: 'import_multiple.yml'
+  loop: '{{ i.terraform|dict2items }}'
+  loop_control:
+    loop_var: 't'
+  vars:
+    r_list: '{{ facts[fact]|default([]) }}'
+    r_skip: []
+
+- include_tasks: 'tf_skipped.yml'
