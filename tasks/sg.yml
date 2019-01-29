@@ -26,6 +26,7 @@
     r_id: 'group_id'
     r_skip:
       - 'description'
+      - 'id'
       - 'name'
       - 'name_prefix'
       - 'vpc_id'
