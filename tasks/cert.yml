@@ -1,5 +1,9 @@
 ---
 
-- include_tasks: 'tf_all.yml'
+- include_tasks: 'import.yml'
   vars:
+    facts:
+      - '{{ i.terraform|dict2items }}'
+    fact: 'value'
+    r_id: 'name'
     r_type: 'aws_iam_server_certificate'
