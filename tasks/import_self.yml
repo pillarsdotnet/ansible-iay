@@ -1,28 +1,26 @@
 ---
 
-# Build r_list from r_args, then import.
+# Build facts from terraform data, then import.
 
-- block:
-    - block:
-        - include_tasks: 'import.yml'
-          vars:
-            r_list: '{{
-              dict(
-                r_args
-                |zip(r_ids)
-                |items2dict(
-                  key_name=i.arg|default(r_id),
-                  value_name=r_id
-                )
-              )
-            }}'
-      vars:
-        r_ids: '{{
-          r_args|map(
-            "regex_replace",
-            i.match|default("^"),
-            i.replace|default("")
-          )
-        }}'
+- set_fact:
+    facts: []
+
+- set_fact:
+    facts: '{{
+      facts|union(
+        { key: item.key,
+          value: {
+            i.arg: item.value[i.arg],
+            r_id: item.value[i.arg]|regex_replace(
+              i.match|default("^"),
+              i.replace|default("")
+            )
+          }
+        }
+      )
+    }}'
+  loop: '{{ i.terraform|dict2items }}'
+  
+- include_tasks: 'import.yml'
   vars:
-    r_args: '{{ i.terraform.values()|map(attribute=i.arg) }}'
+    r_list: '{{ facts }}'
