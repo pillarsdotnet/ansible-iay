@@ -16,7 +16,7 @@
                 )
               )
             }}'
-     vars:
+      vars:
         r_ids: '{{
           r_args|map(
             "regex_replace",
