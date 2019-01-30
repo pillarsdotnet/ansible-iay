@@ -2,6 +2,6 @@
 
 - include_tasks: 'import_self.yml'
   vars:
-    r_id: 'arn'
+    r_id: 'name'
     r_new: []
     r_type: 'aws_iam_server_certificate'
