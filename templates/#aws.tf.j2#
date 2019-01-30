@@ -1,4 +1,0 @@
-# Configure the AWS provider.
-{% set i=infrastructure_item %}
-provider "aws" {
-  {%- if i.
