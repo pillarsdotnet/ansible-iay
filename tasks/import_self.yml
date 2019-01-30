@@ -7,21 +7,15 @@
 
 - set_fact:
     facts: '{{
-      facts|union(
-        [
-          { "key" : item.key,
-            "value" : {
-              i.arg: item.value[i.arg],
-              r_id: item.value[i.arg]|regex_replace(
-                i.match|default("^"),
-                i.replace|default("")
-              )
-            }
-          }
-        ]
-      )
+      facts|union( [ {
+        i.match|default(i.arg): item[i.arg],
+        r_id: item[i.arg]|regex_replace(
+          i.match|default("^"),
+          i.replace|default("")
+        )
+      } ] )
     }}'
-  loop: '{{ i.terraform|dict2items }}'
+  loop: '{{ i.terraform.values() }}'
   
 - include_tasks: 'import.yml'
   vars:
