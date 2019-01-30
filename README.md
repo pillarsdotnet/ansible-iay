@@ -11,25 +11,34 @@ Requires terraform to be installed on the target host.
 Role Variables
 --------------
 
-* `infrastructure_list`: An array of infrastructure values, each of which has the following keys:
-  * `inventory`:
-    * `module`: The ansible inventory module used to retrieve a list of already-built objects.
-    * `args`: Arguments to be supplied to the above ansible module.
-	* `filter`:  A key/value hash used to match one or more objects returned by the inventory module.
-	* `min`: The minimum number of objects which should match the above filter.
-	* `max`: The maximum number of objects which should match the above filter.
-  * `build`:
-    * `type`: The type of infrastructure to build, if fewer than `min` objects are found, or destroy, if more than `max` objects are found.
-	* `args`: A key/value hash describing the object(s) to build or destroy.
+* `infrastructure`: An array of infrastructure values, each of which has the following keys:
+  * `file`: The Terraform resource filename (without the `.tf` extension) to be built.
+  * `task`: The resource type (corresponding to a `.yml` file in the [`tasks`](tasks) directory.
+  * ... : Other key/value pairs may be present, which are passed to the relevant ansible plugin.
+  * `terraform` : A dict of `name` -> `values` for each terraform resource to be listed within this file.
+    * *resource-name* : The terraform name for this resource.
+	  * `arg` : The resource argument whose data value will be used to discover whether this resource already exists.
+	  * `match` :
+	    * If `arg == 'count'`, this is a regular-expression applied against a `tag` value to match existing resources.
+		* Otherwise, this is the field returned by an ansible facts plugin that corresponds to the resource `arg`.
+	  * `replace` : Used with `match` to extract the count index from a `tag` value. Ignored if `arg != 'count'`.
+	  * `tag` : The AWS tag name used for finding resources generated with `arg == 'count'`.
+      * `yaml` : A dict describing the resource to be created or updated, which is passed to Terraform.
 
 Dependencies
 ------------
 
+See [`meta/main.yml`](meta/main.yml).
+
 Example Playbook
 ----------------
 
+TBD
+
 To-Do
 -----
+
+TBD
 
 License
 -------
