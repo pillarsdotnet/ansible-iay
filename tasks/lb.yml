@@ -21,6 +21,6 @@
 
 - include_tasks: 'import.yml'
   vars:
-    fact: 'elbs'
     r_id: 'arn'
+    r_list: '{{ facts.elbs|default([]) }}'
     r_type: 'aws_lb'

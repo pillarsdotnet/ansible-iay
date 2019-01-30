@@ -24,8 +24,8 @@
 
 - include_tasks: 'import.yml'
   vars:
-    fact: 'subnets'
     r_id: 'id'
+    r_list: '{{ facts.subnets|default([]) }}'
     r_new:  # List of resource arguments which force a new resource.
       - 'availability_zone'
       - 'id'

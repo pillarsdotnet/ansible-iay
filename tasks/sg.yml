@@ -22,8 +22,8 @@
 
 - include_tasks: 'import.yml'
   vars:
-    fact: 'security_groups'
     r_id: 'group_id'
+    r_list: '{{ facts.security_groups|default([]) }}'
     r_new:  # List of resource arguments which force a new resource.
       - 'description'
       - 'id'

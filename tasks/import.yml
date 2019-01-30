@@ -4,26 +4,17 @@
   set_fact:
     resources: '{{ i.terraform }}'
 
-- name: 'Build resource list.'
-  loop: '{{ i.terraform|dict2items }}'
-  set_fact:
-    resources: '{{ resources|combine({item.key : item.value.yaml} ) }}'
-
-- include_tasks: 'write_resources.yml'
-
-- block:
-    - block:
-        - include_tasks: 'import_check.yml'
-          loop: '{{ resources|dict2items }}'
-          loop_control:
-            loop_var: 'r'
-      vars:
-
+- include_tasks: 'write_terraform.yml'
   vars:
-    r_id: 'id'
-    r_list: '{{ facts[fact]|default([]) }}'  # Resource import candidates.
-    r_new: []  # List of resource arguments which force a new resource.
+    data:
+      resource: '{{ resources }}'
 
-- include_tasks: 'write_resources.yml'
+- include_tasks: 'import_check.yml'
+  loop: '{{ resources|dict2items }}'
+    loop_control:
+      loop_var: 'r'
 
-      
+- include_tasks: 'write_terraform.yml'
+  vars:
+    data:
+      resource: '{{ resources }}'

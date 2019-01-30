@@ -24,6 +24,6 @@
 
 - include_tasks: 'import.yml'
   vars:
-    fact: 'instances'
     r_id: 'instance_id'
+    r_list: '{{ facts.instances|default([]) }}'
     r_type: 'aws_instance'

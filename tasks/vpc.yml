@@ -24,6 +24,6 @@
 
 - include_tasks: 'import.yml'
   vars:
-    fact: 'vpcs'
     r_id: 'id'
+    r_list: '{{ facts.vpcs|default([]) }}'
     r_type: 'aws_vpc'

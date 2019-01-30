@@ -24,8 +24,8 @@
 
 - include_tasks: 'import.yml'
   vars:
-    fact: 'iam_roles'
     r_id: 'role_name'
+    r_list: '{{ facts.iam_roles|default([]) }}'
     r_new:  # List of resource arguments which force a new resource.
       - 'name'
       - 'name_prefix'

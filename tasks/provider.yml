@@ -1,11 +1,8 @@
 ---
 
-- name: 'Write the {{ i.file }}.tf file.'
-  copy:
-    content: '{{ yaml|to_nice_json }}'
-    dest: '{{ infrastructure_tempdir.path }}/{{ i.file }}.tf'
+- include_tasks: 'write_terraform.yml'
   vars:
-    yaml:
+    data:
       provider: '{{ i.terraform }}'
 
 - name: 'Load terraform plugins.'
