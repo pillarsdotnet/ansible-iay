@@ -7,7 +7,7 @@
 - include_tasks: 'write_terraform.yml'
   vars:
     data:
-      resource: '{{ resources }}'
+      resource: '{{ { r_type : resources } }}'
 
 - include_tasks: 'import_check.yml'
   loop: '{{ resources|dict2items }}'
@@ -17,4 +17,4 @@
 - include_tasks: 'write_terraform.yml'
   vars:
     data:
-      resource: '{{ resources }}'
+      resource: '{{ { r_type : resources } }}'
