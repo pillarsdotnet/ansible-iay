@@ -8,8 +8,8 @@
 - set_fact:
     facts: '{{
       facts|union(
-        { key: item.key,
-          value: {
+        { "key" : item.key,
+          "value" : {
             i.arg: item.value[i.arg],
             r_id: item.value[i.arg]|regex_replace(
               i.match|default("^"),
