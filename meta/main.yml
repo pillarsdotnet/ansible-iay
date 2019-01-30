@@ -1,0 +1,33 @@
+---
+
+galaxy_info:
+  author: 'Robert Vincent'
+  description: 'create infrastructure with terraform'
+  company: 'Valiant Solutions, LLC'
+  license:
+    - BSD
+  min_ansible_version: 2.4
+  platforms:
+    - name: 'Debian'
+      versions:
+        - 'all'
+    - name: 'EL'
+      versions:
+        - 'all'
+    - name: 'Fedora'
+      versions:
+        - 'all'
+    - name: 'Ubuntu'
+      versions:
+        - 'all'
+
+  galaxy_tags:
+    - 'cloud'
+    - 'infrastructure'
+    - 'terraform'
+
+dependencies:
+  - name: 'terraform'
+    scm: 'git'
+    src: 'git@github.helix.gsa.gov:GSASecOps/ansible-terraform.git'
+    version: 'master'
