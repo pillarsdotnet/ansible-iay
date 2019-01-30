@@ -1,0 +1,28 @@
+---
+
+# Build r_list from r_args, then import.
+
+- block:
+    - block:
+        - include_tasks: 'import.yml'
+          vars:
+            r_list: '{{
+              dict(
+                r_args
+                |zip(r_ids)
+                |items2dict(
+                  key_name=i.arg|default(r_id),
+                  value_name=r_id
+                )
+              )
+            }}'
+     vars:
+        r_ids: '{{
+          r_args|map(
+            "regex_replace",
+            i.match|default("^"),
+            i.replace|default("")
+          )
+        }}'
+  vars:
+    r_args: '{{ i.terraform.values()|map(attribute=i.arg) }}'

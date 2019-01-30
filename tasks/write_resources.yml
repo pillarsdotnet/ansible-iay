@@ -1,0 +1,10 @@
+---
+
+- name: 'Write {{ i.file }}.tf file.'
+  copy:
+    content: '{{ data|to_nice_json }}'
+    dest: '{{ infrastructure_tempdir.path }}/{{ i.file }}.tf'
+  vars:
+    data:
+      resource: '{{ resources }}'
+  when: 'resources.keys()|count > 0'

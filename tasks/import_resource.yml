@@ -3,10 +3,8 @@
 - name: 'Import {{ r_type }} named {{ t.key }}{{ count }} from {{ id }}'
   args:
     chdir: '{{ infrastructure_tempdir.path }}'
+  ignore_errors: true
   register: 'import_results'
   shell: 'terraform import {{ name }} {{ id }}'
   vars:
     name: "'{{ r_type }}.{{ t.key }}{{ count }}'"
-
-- debug:
-    var: 'import_results'

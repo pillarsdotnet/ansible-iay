@@ -1,0 +1,15 @@
+---
+      
+- include_tasks: 'import_count.yml'
+  when:
+    - 'i.arg == "count"'
+    - 'r.value.count is defined'
+
+- include_tasks: 'import_one.yml'
+  vars:
+    ids: '{{ r_list|items2dict(key_name=i.match|default(i.arg),
+                               value_name=r_id) }}'
+    r_arg: '{{ r.value[i.arg] }}'
+  when:
+    - 'i.arg != "count"'
+    - 'r_arg in ids.keys()'

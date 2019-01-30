@@ -1,16 +1,29 @@
 ---
 
-- set_fact:
-    skipped: {}
+- name: 'Initialize resources.'
+  set_fact:
+    resources: '{{ i.terraform }}'
 
-- include_tasks: 'tf_all.yml'
-
-- include_tasks: 'import_multiple.yml'
+- name: 'Build resource list.'
   loop: '{{ i.terraform|dict2items }}'
-  loop_control:
-    loop_var: 't'
-  vars:
-    r_list: '{{ facts[fact]|default([]) }}'
-    r_skip: []
+  set_fact:
+    resources: '{{ resources|combine({item.key : item.value.yaml} ) }}'
 
-- include_tasks: 'tf_skipped.yml'
+- include_tasks: 'write_resources.yml'
+
+- block:
+    - block:
+        - include_tasks: 'import_check.yml'
+          loop: '{{ resources|dict2items }}'
+          loop_control:
+            loop_var: 'r'
+      vars:
+
+  vars:
+    r_id: 'id'
+    r_list: '{{ facts[fact]|default([]) }}'  # Resource import candidates.
+    r_new: []  # List of resource arguments which force a new resource.
+
+- include_tasks: 'write_resources.yml'
+
+      

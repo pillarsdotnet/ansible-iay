@@ -24,7 +24,7 @@
   vars:
     fact: 'security_groups'
     r_id: 'group_id'
-    r_skip:
+    r_new:  # List of resource arguments which force a new resource.
       - 'description'
       - 'id'
       - 'name'

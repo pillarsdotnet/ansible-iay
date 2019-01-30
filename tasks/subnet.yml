@@ -26,7 +26,7 @@
   vars:
     fact: 'subnets'
     r_id: 'id'
-    r_skip:
+    r_new:  # List of resource arguments which force a new resource.
       - 'availability_zone'
       - 'id'
     r_type: 'aws_subnet'
