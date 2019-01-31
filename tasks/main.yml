@@ -45,4 +45,4 @@
       plan.stdout: '{{ terraform.results.0.stdout|default("") }}'
       apply.msg: '{{ terraform.results.1.msg|default("") }}'
       apply.stdout: '{{ terraform.results.1.stdout|default("") }}'
-      apply.output: '{{ terraform.results.1.output|deefault("") }}'
+      apply.output: '{{ terraform.results.1.output|default("") }}'
