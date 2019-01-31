@@ -42,7 +42,7 @@
 
 - debug:
     msg: '{{ item|regex_replace("\\n","\n")
-                 |regex_replace("\\t","\t") }}'
+                 |regex_replace("\\t","\t")
                  |regex_replace("\\\"","\"") }}'
   loop:
     - '{{ terraform.results.0.msg|default("") }}'
