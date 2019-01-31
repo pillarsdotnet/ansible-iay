@@ -29,10 +29,23 @@
   loop_control:
     loop_var: 'i'
 
-- name: 'Run terraform.'
+- name: 'Build a terraform plan.'
+  ignore_errors: true
+  loop:
+    - 'planned'
+    - 'present'
+  register: 'terraform'
   terraform:
+    plan_file: '{{ infrastructure_tempdir.path }}/tower-build.tfplan'
     project_path: '{{ infrastructure_tempdir.path }}'
-  register: 'infrastructure_results'
+    state: '{{ item }}
 
 - debug:
-    var: 'infrastructure_results'
+    msg: '{{ item|regex_replace("\\n","\n")
+                 |regex_replace("\\t","\t") }}'
+                 |regex_replace("\\\"","\"") }}'
+  loop:
+    - '{{ terraform.results.0.msg|default("") }}'
+    - '{{ terraform.results.0.stdout|default("") }}'
+    - '{{ terraform.results.1.msg|default("") }}'
+    - '{{ terraform.results.1.stdout|default("") }}'
