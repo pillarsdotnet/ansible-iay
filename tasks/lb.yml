@@ -12,7 +12,7 @@
     profile: '{{ i.profile
             |default(aws_profile|default(omit)) }}'
     region: '{{ i.region
-           |default(aws_region|default(omit)) }}'
+           |default(ansible_ec2_placement_region|default(omit)) }}'
     security_token: '{{ i.security_token
                    |default(aws_security_token|default(omit)) }}'
     validate_certs: '{{ i.validate_certs
