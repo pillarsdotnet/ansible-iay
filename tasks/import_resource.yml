@@ -5,6 +5,6 @@
     chdir: '{{ infrastructure_tempdir.path }}'
   ignore_errors: true
   register: 'import_results'
-  shell: 'terraform import {{ name }} {{ id }}'
+  shell: 'TF_LOG=TRACE terraform import {{ name }} {{ id }}'
   vars:
     name: "'{{ r_type }}.{{ r.key }}{{ count }}'"

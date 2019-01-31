@@ -5,6 +5,9 @@
     count: ''
     id: '{{ ids[r_arg] }}'
 
+- debug:
+    var: 'import_results.stderr'
+
 - name: 'Remove "Force New" fields: {{ r_new|join(", ") }}'
   set_fact:
     resources: '{{
