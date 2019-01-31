@@ -38,10 +38,10 @@
     project_path: '{{ infrastructure_tempdir.path }}'
 
 - debug:
-    msg: '{{ item|regex_replace("\\n","\n")
-                 |regex_replace("\\t","\t") }}'
-  loop:
-    - '{{ terraform.results.0.msg|default("") }}'
-    - '{{ terraform.results.0.stdout|default("") }}'
-    - '{{ terraform.results.1.msg|default("") }}'
-    - '{{ terraform.results.1.stdout|default("") }}'
+    var: 'data'
+  vars:
+    data:
+      plan.msg: '{{ terraform.results.0.msg|default("") }}'
+      plan.stdout: '{{ terraform.results.0.stdout|default("") }}'
+      apply.msg: '{{ terraform.results.1.msg|default("") }}'
+      apply.stdout: '{{ terraform.results.1.stdout|default("") }}'
