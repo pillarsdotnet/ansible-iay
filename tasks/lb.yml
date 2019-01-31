@@ -23,4 +23,9 @@
   vars:
     r_id: 'arn'
     r_list: '{{ facts.elbs|default([]) }}'
+    r_new:
+      - 'internal'
+      - 'load_balancer_type'
+      - 'name'
+      - 'subnet_mapping'
     r_type: 'aws_lb'
