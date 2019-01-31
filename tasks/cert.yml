@@ -3,6 +3,4 @@
 - include_tasks: 'import_self.yml'
   vars:
     r_id: 'name'
-    r_new:
-      - 'private_key'
     r_type: 'aws_iam_server_certificate'
