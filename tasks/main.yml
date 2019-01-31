@@ -38,7 +38,7 @@
   terraform:
     plan_file: '{{ infrastructure_tempdir.path }}/tower-build.tfplan'
     project_path: '{{ infrastructure_tempdir.path }}'
-    state: '{{ item }}
+    state: '{{ item }}'
 
 - debug:
     msg: '{{ item|regex_replace("\\n","\n")
