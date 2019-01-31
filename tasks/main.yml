@@ -30,15 +30,12 @@
     loop_var: 'i'
 
 - name: 'Build a terraform plan.'
+  check_mode: '{{ item }}'
   ignore_errors: true
-  loop:
-    - 'planned'
-    - 'present'
+  loop: [ true, false ]
   register: 'terraform'
   terraform:
-    plan_file: '{{ infrastructure_tempdir.path }}/tower-build.tfplan'
     project_path: '{{ infrastructure_tempdir.path }}'
-    state: '{{ item }}'
 
 - debug:
     msg: '{{ item|regex_replace("\\n","\n")
