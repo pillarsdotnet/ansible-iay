@@ -1,0 +1,8 @@
+---
+
+- include_tasks: 'resource_item.yml'
+  loop: '{{ resource_list|dict2items }}'
+  loop_control:
+    loop_var: 'resource'
+  vars:
+    rtype: '{{ provider }}_{{ resource.key }}'

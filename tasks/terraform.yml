@@ -1,0 +1,9 @@
+---
+
+- terraform:
+    check_mode: '{{ check_mode }}'
+    project_path: '{{ project_path }}'
+  register: 'terraform'
+
+- debug:
+    var: 'terraform'

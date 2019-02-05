@@ -1,6 +1,6 @@
 ---
 
-- name: 'Write {{ i.file }}.tf file.'
+- name: 'Write {{ file }}.tf file.'
   copy:
-    content: '{{ data|to_nice_json }}'
-    dest: '{{ infrastructure_tempdir.path }}/{{ i.file }}.tf'
+    content: '{{ terraform|to_nice_json }}'
+    dest: '{{ path }}/{{ file }}.tf'

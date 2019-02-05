@@ -1,0 +1,30 @@
+---
+
+- include_tasks: 'write_terraform.yml'
+  vars:
+    file: 'provider_{{ provider.key }}'
+    terraform:
+      provider: '{{
+        { provider.key :
+            lookup(vars, provider.key, default={})
+        }
+      }}'
+
+- name: 'Load terraform plugins.'
+  args:
+    chdir: '{{ infrastructure_tempdir.path }}'
+  shell: 'terraform init'
+
+- include_tasks: 'data_list.yml'
+  loop: '{{ provider.value.data|default([]) }}'
+  loop_control:
+    loop_var: 'data_list'
+  vars:
+    provider: '{{ provider.key }}'
+      
+- include_tasks: 'resource_list.yml'
+  loop: '{{ provider.value.resource|default([]) }}'
+  loop_control:
+    loop_var: 'resource_list'
+  vars:
+    provider: '{{ provider.key }}'

@@ -5,44 +5,9 @@
     state: 'directory'
   register: 'infrastructure_tempdir'
 
-- name: 'Inititialize terraform.'
-  shell: 'terraform init'
-  args:
-    chdir: '{{ infrastructure_tempdir.path }}'
-
-- name: 'Include infrastructure_vars.'
-  include_vars:
-    depth: '{{ item.depth|default(omit) }}'
-    dir: '{{ item.dir|default(omit) }}'
-    extensions: '{{ item.extensions|default(omit) }}'
-    file: '{{ item.file|default(omit) }}'
-    files_matching: '{{ item.files_matching|default(omit) }}'
-    ignore_files: '{{ item.ignore_files|default(omit) }}'
-    ignore_unknown_extensions: '{{ item.ignore_unknown_extensions|default(omit) }}'
-    name: '{{ item.name|default(omit) }}'
-  loop: '{{ infrastructure_vars|default([]) }}'
-  when: 'item is mapping'
-
-- name: 'Loop through infrastructure variable.'
-  include_tasks: '{{ i.task }}.yml'
-  loop: '{{ infrastructure }}'
+- include_tasks: 'provider.yml'
+  loop: '{{ infrastructure|dict2items }}'
   loop_control:
-    loop_var: 'i'
-
-- name: 'Build a terraform plan.'
-  check_mode: '{{ item }}'
-  ignore_errors: true
-  loop: [ true, false ]
-  register: 'terraform'
-  terraform:
-    project_path: '{{ infrastructure_tempdir.path }}'
-
-- debug:
-    var: 'data'
+    loop_var: 'provider'
   vars:
-    data:
-      plan.msg: '{{ terraform.results.0.msg|default("") }}'
-      plan.stdout: '{{ terraform.results.0.stdout|default("") }}'
-      apply.msg: '{{ terraform.results.1.msg|default("") }}'
-      apply.stdout: '{{ terraform.results.1.stdout|default("") }}'
-      apply.output: '{{ terraform.results.1.output|default("") }}'
+    path: '{{ infrastructure_tempdir.path }}'

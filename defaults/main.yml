@@ -1,5 +1,26 @@
 ---
 
-r_id: 'id'
+aws_defaults:
+  access_key: null
+  secret_key: null
+  ec2_url: null
+  filters: null
+  profile: null
+  region: '{{ ansible_ec2_placement_region|default(null) }}'
+  security_token: null
+  validate_certs: null
 
-r_new: []
+resource_defaults:
+  r_id: 'id'
+  r_new: []
+  r_type: '{{ task|regex_replace("\.","_") }}'
+
+sg_defaults:
+  r_id: 'group_id'
+  r_new:
+    - 'description'
+    - 'id'
+    - 'name'
+    - 'name_prefix'
+    - 'vpc_id'
+  r_type: 'aws_security_group'
