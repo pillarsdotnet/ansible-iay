@@ -1,8 +1,8 @@
 ---
 
 - include_tasks: 'write_terraform.yml'
-  loop: '{{ data_items|dict2items }}'
+  loop: '{{ resource_items|dict2items }}'
   vars:
     file: '{{ type }}_{{ item.key }}'
     terraform:
-      data: '{{ { type : { item.key : item.value } } }}'
+      resource: '{{ { type : { item.key : item.value } } }}'

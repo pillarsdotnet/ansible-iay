@@ -5,9 +5,9 @@
     state: 'directory'
   register: 'infrastructure_tempdir'
 
-- include_tasks: 'provider.yml'
+- include_tasks: 'providers.yml'
   loop: '{{ infrastructure|dict2items }}'
   loop_control:
-    loop_var: 'provider'
+    loop_var: 'providers'
   vars:
     path: '{{ infrastructure_tempdir.path }}'

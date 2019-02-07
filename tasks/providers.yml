@@ -2,12 +2,10 @@
 
 - include_tasks: 'write_terraform.yml'
   vars:
-    file: 'provider_{{ provider.key }}'
+    file: 'provider_{{ providers.key }}'
     terraform:
       provider: '{{
-        { provider.key :
-            lookup(vars, provider.key, default={})
-        }
+        { providers.key : providers.value.args }
       }}'
 
 - name: 'Load terraform plugins.'
@@ -16,15 +14,15 @@
   shell: 'terraform init'
 
 - include_tasks: 'data_list.yml'
-  loop: '{{ provider.value.data|default([]) }}'
+  loop: '{{ providers.value.data|default([]) }}'
   loop_control:
     loop_var: 'data_list'
   vars:
-    provider: '{{ provider.key }}'
+    provider: '{{ providers.key }}'
       
 - include_tasks: 'resource_list.yml'
-  loop: '{{ provider.value.resource|default([]) }}'
+  loop: '{{ providers.value.resource|default([]) }}'
   loop_control:
     loop_var: 'resource_list'
   vars:
-    provider: '{{ provider.key }}'
+    provider: '{{ providers.key }}'
