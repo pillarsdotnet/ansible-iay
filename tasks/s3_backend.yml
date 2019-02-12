@@ -1,10 +1,13 @@
 ---
 
 - block:
-    - include_tasks: 'data_list.yml'
-      loop: '{{ s3.data }}'
+    - include_tasks: 'data_items.yml'
+      loop: '{{ s3.data|dict2items }}'
       loop_control:
-        loop_var: 'data_list'
+        loop_var: 'datas'
+      vars:
+        data_items: '{{ datas.value }}'
+        type: '{{ provider }}_{{ datas.key }}'
 
     - include_tasks: 'resource_list.yml'
       loop: '{{ s3.resource }}'
@@ -14,11 +17,13 @@
     - include_tasks: 'terraform.yml'
 
 
-    - include_tasks: 'erase_data_list.yml'
-      loop: '{{ s3.data|default([]) }}'
+    - include_tasks: 'erase_data_items.yml'
+      loop: '{{ s3.data|dict2items }}'
       loop_control:
-        loop_var: 'data_list'
-      
+        loop_var: 'datas'
+      vars:
+        data_items: '{{ datas.value.keys() }}'
+        type: '{{ provider }}_{{ datas.key }}'
 
     - include_tasks: 'erase_resource_list.yml'
       loop: '{{ s3.resource|default([]) }}'
@@ -29,18 +34,9 @@
   vars:
     s3:
       data:
-        - iam_policy_document:
-            backend: '{{ aws_iam_policies_kms }}'
+        iam_policy_document:
+          backend: '{{ aws_iam_policies_kms }}'
       resource:
-        - dynamodb_table:
-            backend:
-              attribute:
-                name: 'LockID'
-                type: 'S'
-              hash_key: 'LockID'
-              name: '{{ backend.head }}'
-              read_capacity: 20
-              write_capacity: 20
         - kms_alias:
             backend:
               name: 'alias/{{ backend.head }}'
@@ -50,7 +46,16 @@
               description: 'Encryption key for {{ backend.full }}'
               id: '${aws_kms_alias.backend.target_key_id}'
               policy: '${data.aws_iam_policy_document.backend.json}'
-        - s3_bucket:
+        - dynamodb_table:
+            backend:
+              attribute:
+                name: 'LockID'
+                type: 'S'
+              hash_key: 'LockID'
+              name: '{{ backend.head }}'
+              read_capacity: 20
+              write_capacity: 20
+          s3_bucket:
             backend:
               acl: 'private'
               bucket: '{{ backend.head }}'

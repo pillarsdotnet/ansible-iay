@@ -16,12 +16,14 @@
       tail: '{{ backends.value|regex_replace("^"+(backends.value|dirname)+"/","") }}'
     provider: '{{ providers.key }}'
 
-- include_tasks: 'data_list.yml'
-  loop: '{{ providers.value.data|default([]) }}'
+- include_tasks: 'data_items.yml'
+  loop: '{{ providers.value.data|dict2items }}'
   loop_control:
-    loop_var: 'data_list'
+    loop_var: 'datas'
   vars:
+    data_items: '{{ datas.value }}'
     provider: '{{ providers.key }}'
+    type: '{{ providers.key }}_{{ datas.key }}'
       
 - include_tasks: 'resource_list.yml'
   loop: '{{ providers.value.resource|default([]) }}'
