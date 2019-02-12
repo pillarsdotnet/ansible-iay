@@ -2,6 +2,26 @@ infrastructure_fields:
   aws:
     p:
       - 'region'
+  aws_dynamodb_table:
+    d:
+      - 'name'
+    i: 'name'
+    r:
+      - 'attribute'
+      - 'billing_mode'
+      - 'global_secondary_index'
+      - 'hash_key'
+      - 'local_secondary_index'
+      - 'name'
+      - 'point_in_time_recovery'
+      - 'range_key'
+      - 'read_capacity'
+      - 'server_side_encryption'
+      - 'stream_enabled'
+      - 'stream_view_type'
+      - 'tags'
+      - 'ttl'
+      - 'write_capacity'
   aws_iam_instance_profile:
     d:
       - 'name'

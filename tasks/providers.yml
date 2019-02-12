@@ -10,7 +10,10 @@
   loop_control:
     loop_var: 'backends'
   vars:
-    backend: '{{ backends.value }}'
+    backend:
+      head: '{{ backends.value|dirname }}'
+      full: '{{ backends.value }}'
+      tail: '{{ backends.value|regex_replace("^"+(backends.value|dirname)+"/","") }}'
     provider: '{{ providers.key }}'
 
 - include_tasks: 'data_list.yml'

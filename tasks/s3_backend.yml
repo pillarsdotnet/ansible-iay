@@ -32,19 +32,28 @@
         - iam_policy_document:
             backend: '{{ aws_iam_policies_kms }}'
       resource:
+        - dynamodb_table:
+            backend:
+              attribute:
+                name: 'LockID'
+                type: 'S'
+              hash_key: 'LockID'
+              name: '{{ backend.head }}'
+              read_capacity: 20
+              write_capacity: 20
         - kms_alias:
             backend:
-              name: 'alias/{{ backend|dirname }}'
+              name: 'alias/{{ backend.head }}'
               target_key_id: '${aws_kms_key.backend.key_id}'
         - kms_key:
             backend:
-              description: 'Encryption key for {{ backend }}'
+              description: 'Encryption key for {{ backend.full }}'
               id: '${aws_kms_alias.backend.target_key_id}'
               policy: '${data.aws_iam_policy_document.backend.json}'
         - s3_bucket:
             backend:
               acl: 'private'
-              bucket: '{{ backend|dirname }}'
+              bucket: '{{ backend.head }}'
               encrypt: true
               force_destroy: false
               lifecycle_rule:
@@ -67,8 +76,9 @@
       terraform:
         backend:
           s3:
-            bucket: '{{ backend|dirname }}'
-            key: '{{ backend|regex_replace("^"+(backend|dirname)+"/","") }}'
+            bucket: '{{ backend.head }}'
+            dynamodb_table: '{{ backend.head }}'
+            key: '{{ backend.tail }}'
             region: '{{ providers.value.region|default(aws_region) }}'
     
 - include_tasks: 'terraform.yml'
