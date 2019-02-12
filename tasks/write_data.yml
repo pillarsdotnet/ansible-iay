@@ -1,0 +1,15 @@
+---
+
+- set_fact:
+    data: {}
+
+- set_fact:
+    data: '{{ data|combine({ item : value[item] }) }}'
+  loop: '{{ infrastructure_fields[type].d }}'
+  when: 'item in value'
+
+- include_tasks: 'write_terraform.yml'
+  vars:
+    file: '{{ type }}_d_{{ key }}'
+    terraform:
+      data: '{{ { type : { key : data } } }}'

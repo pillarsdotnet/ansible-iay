@@ -1,10 +1,9 @@
 ---
 
-- include_tasks: 'data_items.yml'
+- include_tasks: 'erase_data_items.yml'
   loop: '{{ data_list|dict2items }}'
   loop_control:
     loop_var: 'datas'
   vars:
     type: '{{ provider }}_{{ datas.key }}'
-    data_items: '{{ datas.value }}'
-
+    data_items: '{{ datas.value.keys() }}'

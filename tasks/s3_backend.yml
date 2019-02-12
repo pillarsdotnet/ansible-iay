@@ -1,0 +1,74 @@
+---
+
+- block:
+    - include_tasks: 'data_list.yml'
+      loop: '{{ s3.data }}'
+      loop_control:
+        loop_var: 'data_list'
+
+    - include_tasks: 'resource_list.yml'
+      loop: '{{ s3.resource }}'
+      loop_control:
+        loop_var: 'resource_list'
+    
+    - include_tasks: 'terraform.yml'
+
+
+    - include_tasks: 'erase_data_list.yml'
+      loop: '{{ s3.data|default([]) }}'
+      loop_control:
+        loop_var: 'data_list'
+      
+
+    - include_tasks: 'erase_resource_list.yml'
+      loop: '{{ s3.resource|default([]) }}'
+      loop_control:
+        loop_var: 'resource_list'
+        
+
+  vars:
+    s3:
+      data:
+        - iam_policy_document:
+            backend: '{{ aws_iam_policies_kms }}'
+      resource:
+        - kms_alias:
+            backend:
+              name: 'alias/{{ backend|dirname }}'
+              target_key_id: '${aws_kms_key.backend.key_id}'
+        - kms_key:
+            backend:
+              description: 'Encryption key for {{ backend }}'
+              id: '${aws_kms_alias.backend.target_key_id}'
+              policy: '${data.aws_iam_policy_document.backend.json}'
+        - s3_bucket:
+            backend:
+              acl: 'private'
+              bucket: '{{ backend|dirname }}'
+              encrypt: true
+              force_destroy: false
+              lifecycle_rule:
+                abort_incomplete_multipart_upload_days: 1
+                enabled: true
+              noncurrent_version_expiration:
+                days: '{{ infrastructure_backend_expire }}'
+              server_side_encryption_configuration:
+                rule:
+                  apply_server_side_encryption_by_default:
+                    kms_master_key_id: '${aws_kms_key.backend.arn}'
+                    sse_algorithm: 'aws:kms'
+              versioning:
+                enabled: true
+
+- include_tasks: 'write_terraform.yml'
+  vars:
+    file: '{{ provider }}_s3_backend'
+    terraform:
+      terraform:
+        backend:
+          s3:
+            bucket: '{{ backend|dirname }}'
+            key: '{{ backend|regex_replace("^"+(backend|dirname)+"/","") }}'
+            region: '{{ providers.value.region|default(aws_region) }}'
+    
+- include_tasks: 'terraform.yml'

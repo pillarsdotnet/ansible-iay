@@ -1,0 +1,15 @@
+---
+
+- set_fact:
+    provider: {}
+
+- set_fact:
+    provider: '{{ provider|combine({ item : value[item] }) }}'
+  loop: '{{ infrastructure_fields[key].p }}'
+  when: 'item in value'
+
+- include_tasks: 'write_terraform.yml'
+  vars:
+    file: '{{ key }}_p'
+    terraform:
+      provider: '{{ { key : provider } }}'

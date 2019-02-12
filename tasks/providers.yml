@@ -1,17 +1,17 @@
 ---
 
-- include_tasks: 'write_terraform.yml'
+- include_tasks: 'write_provider.yml'
   vars:
-    file: 'provider_{{ providers.key }}'
-    terraform:
-      provider: '{{
-        { providers.key : providers.value.args }
-      }}'
+    key: '{{ providers.key }}'
+    value: '{{ providers.value }}'
 
-- name: 'Load terraform plugins.'
-  args:
-    chdir: '{{ infrastructure_tempdir.path }}'
-  shell: 'terraform init'
+- include_tasks: '{{ backends.key }}_backend.yml'
+  loop: '{{ providers.value.backend|default({})|dict2items }}'
+  loop_control:
+    loop_var: 'backends'
+  vars:
+    backend: '{{ backends.value }}'
+    provider: '{{ providers.key }}'
 
 - include_tasks: 'data_list.yml'
   loop: '{{ providers.value.data|default([]) }}'

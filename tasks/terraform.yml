@@ -1,9 +1,26 @@
 ---
 
-- terraform:
-    check_mode: '{{ check_mode }}'
-    project_path: '{{ project_path }}'
-  register: 'terraform'
 
-- debug:
-    var: 'terraform'
+- name: 'Load terraform plugins.'
+  args:
+    chdir: '{{ path }}'
+  shell: 'terraform init'
+
+- name: 'Import existing resources.'
+  shell: 'terraform import {{ item }}'
+  args:
+    chdir: '{{ path }}'
+  failed_when: false
+  ignore_errors: true
+  loop: '{{ imports }}'
+
+- name: 'Reset imports list.'
+  set_fact:
+    imports: []
+
+- terraform:
+    project_path: '{{ path }}'
+  check_mode: '{{ item }}'
+  loop:
+    - true
+    - false

@@ -1,13 +1,29 @@
 ---
 
 - name: 'Make temp directory for terraform run.'
+  changed_when: false
   tempfile:
     state: 'directory'
   register: 'infrastructure_tempdir'
 
-- include_tasks: 'providers.yml'
-  loop: '{{ infrastructure|dict2items }}'
-  loop_control:
-    loop_var: 'providers'
+- name: 'Initialize imports list.'
+  set_fact:
+    imports: []
+
+- block:
+
+    - include_tasks: 'providers.yml'
+      loop: '{{ infrastructure|dict2items }}'
+      loop_control:
+        loop_var: 'providers'
+
+    - include_tasks: 'terraform.yml'
+
+    - file:
+        path: '{{ path }}'
+        state: 'absent'
+      changed_when: false
+
   vars:
     path: '{{ infrastructure_tempdir.path }}'
+    

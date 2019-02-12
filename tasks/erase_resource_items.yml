@@ -1,0 +1,12 @@
+---
+
+- file:
+    path: '{{ path }}/{{ type }}_r_{{ item }}.tf'
+    state: 'absent'
+  loop: '{{ resource_items }}'
+
+- shell: 'terraform state rm {{ type }}.{{ item }}'
+  args:
+    chdir: '{{ path }}'
+  loop: '{{ resource_items }}'
+    
