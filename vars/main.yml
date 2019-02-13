@@ -1,4 +1,6 @@
 infrastructure_fields:
+  all:
+    - 'depends_on'
   aws:
     p:
       - 'region'
@@ -50,12 +52,7 @@ infrastructure_fields:
       - 'version'
   aws_iam_role:
     d:
-      - 'arn'
-      - 'assume_role_policy;'
-      - 'id'
-      - 'path'
-      - 'permissions_boundary'
-      - 'unique_id'
+      - 'name'
     i: 'name'
     r:
       - 'assume_role_policy'
@@ -74,12 +71,15 @@ infrastructure_fields:
       - 'name_prefix'
       - 'policy'
       - 'role'
+  aws_iam_role_policy_attachment:
+    i: 'role_policy_arn'
+    r:
+      - 'policy_arn'
+      - 'role'
   aws_iam_server_certificate:
     d:
       - 'latest'
       - 'name'
-      - 'name'
-      - 'name_prefix'
       - 'path_prefix'
     i: 'name'
     r:
@@ -230,3 +230,7 @@ infrastructure_fields:
       - 'enable_dns_support'
       - 'instance_tenancy'
       - 'tags'
+
+terraform_verb:
+  absent: 'destroy'
+  present: 'apply'

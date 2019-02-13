@@ -1,0 +1,34 @@
+---
+
+- include_tasks: 'provider_write.yml'
+  vars:
+    key: '{{ p.key }}'
+    value: '{{ p.value }}'
+
+- include_tasks: 'backend_{{ b.key }}.yml'
+  loop: '{{ p.value.backend|default({})|dict2items }}'
+  loop_control:
+    loop_var: 'b'
+  vars:
+    backend:
+      head: '{{ b.value|dirname }}'
+      full: '{{ b.value }}'
+      tail: '{{ b.value|regex_replace("^"+(b.value|dirname)+"/","") }}'
+    provider: '{{ p.key }}'
+
+- include_tasks: 'datatype_add.yml'
+  loop: '{{ p.value.data|dict2items }}'
+  loop_control:
+    loop_var: 'd'
+  vars:
+    datas: '{{ d.value }}'
+    provider: '{{ p.key }}'
+    type: '{{ p.key }}_{{ d.key }}'
+      
+- include_tasks: 'resourcegroup_add.yml'
+  loop: '{{ p.value.resource|default([]) }}'
+  loop_control:
+    loop_var: 'group'
+  vars:
+    provider: '{{ p.key }}'
+    

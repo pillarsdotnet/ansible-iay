@@ -1,12 +1,12 @@
 ---
 
 - file:
-    path: '{{ path }}/{{ type }}_r_{{ item }}.tf'
+    path: '{{ path }}/{{ type }}.{{ item }}.tf.json'
     state: 'absent'
-  loop: '{{ resource_items }}'
+  loop: '{{ resources.keys() }}'
 
 - shell: 'terraform state rm {{ type }}.{{ item }}'
   args:
     chdir: '{{ path }}'
-  loop: '{{ resource_items }}'
+  loop: '{{ resources.keys() }}'
     

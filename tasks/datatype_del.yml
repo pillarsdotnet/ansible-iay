@@ -1,0 +1,7 @@
+---
+
+- file:
+    path: '{{ path }}/data.{{ type }}.{{ item }}.tf.json'
+    state: 'absent'
+  loop: '{{ datas.keys() }}'
+    

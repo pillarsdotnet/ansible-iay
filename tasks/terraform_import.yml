@@ -1,0 +1,11 @@
+---
+
+- include_tasks: 'terraform_import_mapping.yml'
+  vars:
+    id: '{{ iargs.id }}'
+  when: 'iargs.value is mapping'
+
+- include_tasks: 'terraform_import_scalar.yml'
+  vars:
+    id: '{{ iargs.value }}'
+  when: 'iargs.value is not mapping'

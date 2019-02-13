@@ -1,0 +1,40 @@
+---
+
+- set_fact:
+    resource: {}
+
+- set_fact:
+    resource: '{{ resource|combine({ item : value[item] }) }}'
+  loop: '{{ infrastructure_fields[type].r|union(infrastructure_fields.all) }}'
+  when: 'item in value'
+
+- include_tasks: 'terraform_write.yml'
+  vars:
+    file: '{{ type }}.{{ key }}'
+    terraform:
+      resource: '{{ { type : { key : resource } } }}'
+  
+- name: 'Add {{ type }}.{{ key }} to imports list.'
+  block:
+
+    - set_fact:
+        imports: '{{ imports|union(inew) }}'
+      vars:
+        inew:
+          - '{{ iargs|combine({"value":id}) }}'
+      when: 'id|regex_search(regex) is none'
+
+    - set_fact:
+        imports: '{{ imports|union(inew) }}'
+      vars:
+        inew:
+          - '{{ iargs|combine({"id":id,"value":value}) }}'
+      when: 'id|regex_search(regex) is not none'
+
+  vars:
+    iargs:
+      key: '{{ key }}'
+      type: '{{ type }}'
+    id: '{{ value[infrastructure_fields[type].i]|default(none) }}'
+    regex: '[$][{][ ]*data[.]{{ type }}[.]{{ key }}[.][^}]+[}]'
+  when: 'id is not none'

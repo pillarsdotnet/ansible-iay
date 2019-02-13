@@ -1,9 +1,0 @@
----
-
-- include_tasks: 'erase_resource_items.yml'
-  loop: '{{ resource_list|dict2items }}'
-  loop_control:
-    loop_var: 'resources'
-  vars:
-    type: '{{ provider }}_{{ resources.key }}'
-    resource_items: '{{ resources.value.keys() }}'

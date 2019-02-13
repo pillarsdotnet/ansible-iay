@@ -1,0 +1,16 @@
+---
+
+- block:
+
+    - name: 'terraform {{ item }}'
+      shell: 'terraform {{ item }}'
+      args:
+        chdir: '{{ path }}'
+      failed_when: false
+      ignore_errors: true
+      loop:
+        - 'state rm {{ rname }}'
+        - 'import {{ rname }} {{ iresource.value }}'
+
+  vars:
+    rname: '{{ iresource.type }}.{{ iresource.key }}'

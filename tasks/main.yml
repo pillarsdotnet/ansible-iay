@@ -1,23 +1,25 @@
 ---
 
+- name: 'Initialize imports list.'
+  set_fact:
+    imports: []
+
 - name: 'Make temp directory for terraform run.'
   changed_when: false
   tempfile:
     state: 'directory'
   register: 'infrastructure_tempdir'
 
-- name: 'Initialize imports list.'
-  set_fact:
-    imports: []
-
 - block:
 
-    - include_tasks: 'providers.yml'
+    - include_tasks: 'providers_add.yml'
       loop: '{{ infrastructure|dict2items }}'
       loop_control:
-        loop_var: 'providers'
+        loop_var: 'p'
 
-    - include_tasks: 'terraform.yml'
+    - include_tasks: 'terraform_apply.yml'
+      vars:
+        state: '{{ infrastructure_state }}'
 
     - file:
         path: '{{ path }}'
@@ -26,4 +28,3 @@
 
   vars:
     path: '{{ infrastructure_tempdir.path }}'
-    

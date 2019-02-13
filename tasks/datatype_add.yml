@@ -1,0 +1,9 @@
+---
+
+- include_tasks: 'data_write.yml'
+  loop: '{{ datas|default({})|dict2items }}'
+  loop_control:
+    loop_var: 'i'
+  vars:
+    key: '{{ i.key }}'
+    value: '{{ i.value }}'

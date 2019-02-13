@@ -5,11 +5,11 @@
 
 - set_fact:
     data: '{{ data|combine({ item : value[item] }) }}'
-  loop: '{{ infrastructure_fields[type].d }}'
+  loop: '{{ infrastructure_fields[type].d|union(infrastructure_fields.all) }}'
   when: 'item in value'
 
-- include_tasks: 'write_terraform.yml'
+- include_tasks: 'terraform_write.yml'
   vars:
-    file: '{{ type }}_d_{{ key }}'
+    file: 'data.{{ type }}.{{ key }}'
     terraform:
       data: '{{ { type : { key : data } } }}'

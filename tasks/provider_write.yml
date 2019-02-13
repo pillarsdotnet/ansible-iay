@@ -8,7 +8,7 @@
   loop: '{{ infrastructure_fields[key].p }}'
   when: 'item in value'
 
-- include_tasks: 'write_terraform.yml'
+- include_tasks: 'terraform_write.yml'
   vars:
     file: '{{ key }}_p'
     terraform:

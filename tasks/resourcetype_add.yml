@@ -1,0 +1,9 @@
+---
+
+- include_tasks: 'resource_write.yml'
+  loop: '{{ resources|default({})|dict2items }}'
+  loop_control:
+    loop_var: 'i'
+  vars:
+    key: '{{ i.key }}'
+    value: '{{ i.value }}'
