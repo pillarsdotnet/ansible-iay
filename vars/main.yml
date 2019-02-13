@@ -169,6 +169,43 @@ infrastructure_fields:
       - 'subnet_mapping'
       - 'subnets'
       - 'tags'
+  aws_lb_listener:
+    d:
+      - 'arn'
+      - 'load_balancer_arn'
+      - 'port'
+    i: 'arn'
+    r:
+      - 'certificate_arn'
+      - 'default_action'
+      - 'load_balancer_arn'
+      - 'port'
+      - 'protocol'
+      - 'ssl_policy'
+  aws_lb_target_group:
+    d:
+      - 'arn'
+      - 'name'
+    i: 'arn'
+    r:
+      - 'deregistration_delay'
+      - 'health_check'
+      - 'name'
+      - 'name_prefix'
+      - 'port'
+      - 'protocol'
+      - 'proxy_protocol_v2'
+      - 'slow_start'
+      - 'stickiness'
+      - 'tags'
+      - 'target_type'
+      - 'vpc_id'
+  aws_lb_target_group_attachment:
+    r:
+      - 'availability_zone'
+      - 'port'
+      - 'target_group_arn'
+      - 'target_id'
   aws_s3_bucket:
     d:
       - 'bucket'
