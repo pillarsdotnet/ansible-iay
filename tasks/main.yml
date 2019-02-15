@@ -1,11 +1,13 @@
 ---
 
-- name: 'Initialize imports list.'
-  set_fact:
+- name: 'Fetch ec2 metatdata.'
+  ec2_metadata_facts:
+  when: 'aws_account is not defined'
+
+- set_fact:
     imports: []
 
 - name: 'Make temp directory for terraform run.'
-  changed_when: false
   tempfile:
     state: 'directory'
   register: 'iay_tempdir'
@@ -24,7 +26,6 @@
     - file:
         path: '{{ path }}'
         state: 'absent'
-      changed_when: false
 
   vars:
     path: '{{ iay_tempdir.path }}'

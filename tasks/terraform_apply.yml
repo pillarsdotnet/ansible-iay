@@ -1,9 +1,9 @@
 ---
 
-- name: 'Load terraform plugins.'
+- shell: '( set -x ; terraform init ) &> terraform.log'
   args:
     chdir: '{{ path }}'
-  shell: 'terraform init'
+  
 
 - include_tasks: 'terraform_import.yml'
   loop: '{{ imports }}'
@@ -13,11 +13,12 @@
     n: '{{ iargs.type }}.{{ iargs.key }}'
     o: '{{ iargs.type }}_{{ iargs.key }}'
 
-- name: 'Reset imports list.'
-  set_fact:
+- set_fact:
     imports: []
 
-- name: 'terraform {{ terraform_verb[state] }}'
+- name: '( set -x ; terraform {{ terraform_verb[state] }} ) >> terraform.log 2>&1'
   terraform:
     project_path: '{{ path }}'
     state: '{{ state }}'
+  async: '{{ iay_async_timeout }}'
+  poll: '{{ iay_async_poll }}'
