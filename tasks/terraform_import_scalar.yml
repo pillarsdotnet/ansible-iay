@@ -1,9 +1,0 @@
----
-
-- include_tasks: 'terraform_import_resource.yml'
-  vars:
-    iresource: '{{ iargs }}'
-  when: 'id|regex_search("[$][{][^}]*[}]") is none'
-
-- include_tasks: 'terraform_import_interpolated.yml'
-  when: 'id|regex_search("[$][{][^}]*[}]") is not none'

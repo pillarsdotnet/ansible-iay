@@ -5,7 +5,7 @@
 
 - set_fact:
     provider: '{{ provider|combine({ item : value[item] }) }}'
-  loop: '{{ infrastructure_fields[key].p }}'
+  loop: '{{ iay_fields[key].p }}'
   when: 'item in value'
 
 - include_tasks: 'terraform_write.yml'

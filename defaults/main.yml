@@ -1,5 +1,7 @@
 ---
 
-infrastructure_backend_expire: 90
+aws_account: '{{ ansible_ec2_instance_identity_document_accountid }}'
 
-infrastructure_state: 'present'
+iay_backend_expire: 90
+
+iay_state: 'present'

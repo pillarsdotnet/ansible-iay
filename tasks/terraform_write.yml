@@ -4,3 +4,4 @@
   copy:
     content: '{{ terraform|to_nice_json }}'
     dest: '{{ path }}/{{ file }}.tf.json'
+

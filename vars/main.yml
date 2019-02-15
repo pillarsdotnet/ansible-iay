@@ -1,13 +1,14 @@
-infrastructure_fields:
-  all:
-    - 'depends_on'
+iay_fields:
+  all: ['depends_on']
+  all_d: []
+  all_r: ['lifecycle']
   aws:
     p:
       - 'region'
   aws_dynamodb_table:
+    +i: '${+name}'
     d:
       - 'name'
-    i: 'name'
     r:
       - 'attribute'
       - 'billing_mode'
@@ -25,18 +26,18 @@ infrastructure_fields:
       - 'ttl'
       - 'write_capacity'
   aws_iam_instance_profile:
+    +i: '${+name}'
     d:
       - 'name'
-    i: 'name'
     r:
       - 'name'
       - 'name_prefix'
       - 'path'
       - 'role'
   aws_iam_policy:
+    +i: 'arn:aws:iam::{{ aws_account }}:policy/${+name}'
     d:
       - 'arn'
-    i: 'arn'
     r:
       - 'description'
       - 'name'
@@ -51,9 +52,9 @@ infrastructure_fields:
       - 'statement'
       - 'version'
   aws_iam_role:
+    +i: '${+name}'
     d:
       - 'name'
-    i: 'name'
     r:
       - 'assume_role_policy'
       - 'description'
@@ -65,23 +66,24 @@ infrastructure_fields:
       - 'permissions_boundary'
       - 'tags'
   aws_iam_role_policy:
-    i: 'role_policy'
+    +i: '${+role}/${+policy}'
     r:
       - 'name'
       - 'name_prefix'
       - 'policy'
       - 'role'
   aws_iam_role_policy_attachment:
-    i: 'role_policy_arn'
+    +i: '${+role}/${+policy_arn}'
     r:
       - 'policy_arn'
       - 'role'
   aws_iam_server_certificate:
+    +i: '${+name}'
     d:
       - 'latest'
       - 'name'
+      - 'name_prefix'
       - 'path_prefix'
-    i: 'name'
     r:
       - 'certificate_body'
       - 'certificate_chain'
@@ -90,12 +92,12 @@ infrastructure_fields:
       - 'path'
       - 'private_key'
   aws_instance:
+    +i: '${+id}'
     d:
       - 'instance_id'
       - 'instance_tags'
       - 'filter'
       - 'get_password_data'
-    i: 'id'
     r:
       - 'ami'
       - 'associate_public_ip_address'
@@ -130,17 +132,17 @@ infrastructure_fields:
       - 'volume_tags'
       - 'vpc_security_group_ids'
   aws_kms_alias:
+    +i: '${+name}'
     d:
       - 'name'
-    i: 'name'
     r:
       - 'name'
       - 'target_key_id'
   aws_kms_key:
+    +i: '${+id}'
     d:
       - 'key_id'
       - 'grant_tokens'
-    i: 'id'
     r:
       - 'description'
       - 'key_usage'
@@ -150,10 +152,10 @@ infrastructure_fields:
       - 'enable_key_rotation'
       - 'tags'
   aws_lb:
+    +i: '${+arn}'
     d:
       - 'arn'
       - 'name'
-    i: 'arn'
     r:
       - 'access_logs'
       - 'enable_cross_zone_load_balancing'
@@ -170,11 +172,11 @@ infrastructure_fields:
       - 'subnets'
       - 'tags'
   aws_lb_listener:
+    +i: '${+arn}'
     d:
       - 'arn'
       - 'load_balancer_arn'
       - 'port'
-    i: 'arn'
     r:
       - 'certificate_arn'
       - 'default_action'
@@ -183,10 +185,10 @@ infrastructure_fields:
       - 'protocol'
       - 'ssl_policy'
   aws_lb_target_group:
+    +i: '${+arn}'
     d:
       - 'arn'
       - 'name'
-    i: 'arn'
     r:
       - 'deregistration_delay'
       - 'health_check'
@@ -207,9 +209,9 @@ infrastructure_fields:
       - 'target_group_arn'
       - 'target_id'
   aws_s3_bucket:
+    +i: '${+bucket}'
     d:
       - 'bucket'
-    i: 'bucket'
     r:
       - 'acceleration_status'
       - 'acl'
@@ -228,6 +230,7 @@ infrastructure_fields:
       - 'versioning'
       - 'website'
   aws_subnet:
+    +i: '${+id}'
     d:
       - 'availability_zone'
       - 'availability_zone_id'
@@ -238,7 +241,6 @@ infrastructure_fields:
       - 'state'
       - 'tags'
       - 'vpc_id'
-    i: 'id'
     r:
       - 'assign_ipv6_address_on_creation'
       - 'availability_zone'
@@ -249,6 +251,7 @@ infrastructure_fields:
       - 'tags'
       - 'vpc_id'
   aws_vpc:
+    +i: '${+id}'
     d:
       - 'cidr_block'
       - 'default'
@@ -257,7 +260,6 @@ infrastructure_fields:
       - 'id'
       - 'state'
       - 'tags'
-    i: 'id'
     r:
       - 'assign_generated_ipv6_cidr_block'
       - 'cidr_block'

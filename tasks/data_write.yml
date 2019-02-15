@@ -1,15 +1,20 @@
 ---
 
 - set_fact:
-    data: {}
+    data:
+      depends_on: []
 
 - set_fact:
     data: '{{ data|combine({ item : value[item] }) }}'
-  loop: '{{ infrastructure_fields[type].d|union(infrastructure_fields.all) }}'
+  loop: '{{ iay_fields[type].d
+     |union(iay_fields.all)
+     |union(iay_fields.all_d) }}'
   when: 'item in value'
 
-- include_tasks: 'terraform_write.yml'
+- name: 'Check whether data.{{ type }}.{{ key }} has at least one field.'
+  include_tasks: 'terraform_write.yml'
   vars:
     file: 'data.{{ type }}.{{ key }}'
     terraform:
       data: '{{ { type : { key : data } } }}'
+  when: 'data.keys()|length > 1'

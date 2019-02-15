@@ -5,11 +5,13 @@
     chdir: '{{ path }}'
   shell: 'terraform init'
 
-- name: 'Import existing resources.'
-  include_tasks: 'terraform_import.yml'
+- include_tasks: 'terraform_import.yml'
   loop: '{{ imports }}'
   loop_control:
     loop_var: 'iargs'
+  vars:
+    n: '{{ iargs.type }}.{{ iargs.key }}'
+    o: '{{ iargs.type }}_{{ iargs.key }}'
 
 - name: 'Reset imports list.'
   set_fact:
@@ -19,7 +21,3 @@
   terraform:
     project_path: '{{ path }}'
     state: '{{ state }}'
-  register: 'terraform'
-
-- debug:
-    var: 'terraform.stdout_lines'

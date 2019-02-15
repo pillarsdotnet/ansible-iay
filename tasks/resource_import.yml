@@ -1,0 +1,24 @@
+---
+
+- name: 'Initialize import id.'
+  set_fact:
+    id: '{{ iay_fields[type]["+i"]|default(none) }}'
+
+- name: 'Loop through value fields to interpolate import id.'
+  set_fact:
+    id: '{{ id|regex_replace("\$\{\+"+item.key+"\}",item.value|string) }}'
+  loop: '{{ value|dict2items }}'
+
+- name: 'Finish interpolating import id.'
+  set_fact:
+    id: '{{ id|regex_replace("\$\{\+","${data."+type+"."+key+".") }}'
+
+- name: 'Add {{ type }}.{{ key }} to imports list.'
+  set_fact:
+    imports: '{{ imports|union([inew]) }}'
+  vars:
+    inew:
+      id: '{{ id }}'
+      key: '{{ key }}'
+      type: '{{ type }}'
+      value: '{{ value }}'

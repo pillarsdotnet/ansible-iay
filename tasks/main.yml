@@ -8,18 +8,18 @@
   changed_when: false
   tempfile:
     state: 'directory'
-  register: 'infrastructure_tempdir'
+  register: 'iay_tempdir'
 
 - block:
 
     - include_tasks: 'providers_add.yml'
-      loop: '{{ infrastructure|dict2items }}'
+      loop: '{{ iay|dict2items }}'
       loop_control:
         loop_var: 'p'
 
     - include_tasks: 'terraform_apply.yml'
       vars:
-        state: '{{ infrastructure_state }}'
+        state: '{{ iay_state }}'
 
     - file:
         path: '{{ path }}'
@@ -27,4 +27,4 @@
       changed_when: false
 
   vars:
-    path: '{{ infrastructure_tempdir.path }}'
+    path: '{{ iay_tempdir.path }}'

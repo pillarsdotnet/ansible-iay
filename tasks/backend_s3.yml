@@ -20,11 +20,11 @@
           include_tasks: 'terraform_apply.yml'
           vars:
             state: 'present'
-          when: 'infrastructure_state == "absent"'
+          when: 'iay_state == "absent"'
 
         - include_tasks: 'terraform_apply.yml'
           vars:
-            state: '{{ infrastructure_state }}'
+            state: '{{ iay_state }}'
           
         - include_tasks: 'datatype_del.yml'
           loop: '{{ s3_data|dict2items }}'
@@ -66,8 +66,8 @@
                   type: 'S'
                 hash_key: 'LockID'
                 name: '{{ backend.head }}'
-                read_capacity: 20
-                write_capacity: 20
+                read_capacity: 50
+                write_capacity: 50
             kms_key:
               backend:
                 description: 'Encryption key for {{ backend.full }}'
@@ -82,7 +82,7 @@
                   abort_incomplete_multipart_upload_days: 1
                   enabled: true
                 noncurrent_version_expiration:
-                  days: '{{ infrastructure_backend_expire }}'
+                  days: '{{ iay_backend_expire }}'
                 policy: '${data.aws_iam_policy_document.backend.json}'
                 server_side_encryption_configuration:
                   rule:
@@ -149,4 +149,4 @@
       args:
         chdir: '{{ path }}'
 
-  when: 'infrastructure_state == "present"'
+  when: 'iay_state == "present"'

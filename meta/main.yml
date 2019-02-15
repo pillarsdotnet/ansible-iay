@@ -2,7 +2,7 @@
 
 galaxy_info:
   author: 'Robert Vincent'
-  description: 'create infrastructure with terraform'
+  description: 'Infrastructure As Yaml'
   company: 'Valiant Solutions, LLC'
   license:
     - BSD
