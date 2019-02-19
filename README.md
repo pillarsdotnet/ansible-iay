@@ -18,7 +18,7 @@ Role Variables
 	* `data`: Terraform data sources.
 	* `region`: The AWS region in which to build this infrastructure.
 	* `resource`: An array of Terraform resource blocks.
-	  * - (type): The type of resource, without an `aws_` prefix.
+	  * \- (type): The type of resource, without an `aws_` prefix.
 	      * (name): The Terraform name of this resource.
 		    * (attribute): An attribute for building this resource.
 		    * (attribute): A second attribute.
@@ -27,12 +27,12 @@ Role Variables
 		    * (attribute): An attribute for building this resource.
 		    * (attribute): A second attribute.
 		    * (attribute): A third attribute.
-	  *   (type): The type of a second resource within the same block.
+	  * &nbsp; (type): The type of a second resource within the same block.
 	      * (name): The Terraform name of this resource.
 		    * (attribute): An attribute for building this resource.
 		    * (attribute): A second attribute.
 		    * (attribute): A third attribute.
-	  * - (type): The type of a resource in a second block.
+	  * \- (type): The type of a resource in a second block.
 	      * (name): The Terraform name of this resource.
 		    * (attribute): An attribute for building this resource.
 		    * (attribute): A second attribute.
