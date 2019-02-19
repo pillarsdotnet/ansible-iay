@@ -19,12 +19,12 @@
         - name: 'Enforce force_destroy on bucket.'
           include_tasks: 'terraform_apply.yml'
           vars:
-            state: 'present'
-          when: 'iay_state == "absent"'
+            action: 'apply'
+          when: 'iay_action == "destroy"'
 
         - include_tasks: 'terraform_apply.yml'
           vars:
-            state: '{{ iay_state }}'
+            action: '{{ iay_action }}'
           
         - include_tasks: 'datatype_del.yml'
           loop: '{{ s3_data|dict2items }}'
@@ -149,4 +149,4 @@
       args:
         chdir: '{{ path }}'
 
-  when: 'iay_state == "present"'
+  when: 'iay_action == "apply"'

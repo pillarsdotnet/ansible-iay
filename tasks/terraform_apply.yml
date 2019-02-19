@@ -16,9 +16,9 @@
 - set_fact:
     imports: []
 
-- name: '( set -x ; terraform {{ terraform_verb[state] }} ) >> terraform.log 2>&1'
-  terraform:
-    project_path: '{{ path }}'
-    state: '{{ state }}'
+- shell: '( set -x ; terraform {{ action }} -auto-approve=true
+            -input=false -lock=true -no-color ) 2>&1 | tee -a terraform.log'
+  args:
+    chdir: '{{ path }}'
   async: '{{ iay_async_timeout }}'
   poll: '{{ iay_async_poll }}'

@@ -2,4 +2,4 @@
 
 - include_tasks: 'main.yml'
   vars:
-    iay_state: 'absent'
+    iay_action: 'destroy'

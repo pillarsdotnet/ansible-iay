@@ -21,7 +21,7 @@
 
     - include_tasks: 'terraform_apply.yml'
       vars:
-        state: '{{ iay_state }}'
+        action: '{{ iay_action }}'
 
     - file:
         path: '{{ path }}'
