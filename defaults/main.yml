@@ -6,6 +6,6 @@ iay_action: 'apply'
 
 iay_async_poll: 30
 
-iay_async_timeout: 900
+iay_async_timeout: 1800
 
 iay_backend_expire: 90

@@ -5,6 +5,14 @@ iay_fields:
   aws:
     p:
       - 'region'
+  aws_db_subnet_group:
+    +i: '${+name}'
+    r:
+      - 'description'
+      - 'name'
+      - 'name_prefix'
+      - 'subnet_ids'
+      - 'tags'
   aws_dynamodb_table:
     +i: '${+name}'
     d:
@@ -265,6 +273,23 @@ iay_fields:
       - 'tags'
       - 'versioning'
       - 'website'
+  aws_security_group:
+    +i: '${+id}'
+    d:
+      - 'filter'
+      - 'id'
+      - 'name'
+      - 'tags'
+      - 'vpc_id'
+    r:
+      - 'name'
+      - 'name_prefix'
+      - 'description'
+      - 'ingress'
+      - 'egress'
+      - 'revoke_rules_on_delete'
+      - 'vpc_id'
+      - 'tags'
   aws_subnet:
     +i: '${+id}'
     d:
