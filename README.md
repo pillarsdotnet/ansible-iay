@@ -38,9 +38,9 @@ Role Variables
 		    * (attribute): A second attribute.
 		    * (attribute): A third attribute.
 
-This role with loop through the ordered list of resource blocks,
+This role will loop through the ordered list of resource blocks,
 attempting to import each resource with sufficient attributes for
-unique identification.
+unique identification, before running `terraform apply`.
 
 Dependencies
 ------------
