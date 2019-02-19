@@ -20,7 +20,7 @@
           include_tasks: 'terraform_apply.yml'
           vars:
             action: 'apply'
-          when: 'iay_action == "destroy"'
+          when: 'iay_action != "apply"'
 
         - include_tasks: 'terraform_apply.yml'
           vars:
@@ -143,10 +143,5 @@
         path: '{{ item }}'
         state: 'absent'
       loop: '{{ lookup("fileglob", path + "/terraform.tfstate*", wantlist=true) }}'
-
-    - name: 'Re-initialize terraform.'
-      shell: 'terraform init'
-      args:
-        chdir: '{{ path }}'
 
   when: 'iay_action == "apply"'
