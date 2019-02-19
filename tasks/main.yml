@@ -5,7 +5,7 @@
   when: 'aws_account is not defined'
 
 - set_fact:
-    imports: []
+    iay_imports: []
 
 - name: 'Make temp directory for terraform run.'
   tempfile:

@@ -15,7 +15,7 @@
 
 - name: 'Add {{ type }}.{{ key }} to imports list.'
   set_fact:
-    imports: '{{ imports|union([inew]) }}'
+    iay_imports: '{{ iay_imports|union([inew]) }}'
   vars:
     inew:
       id: '{{ id }}'

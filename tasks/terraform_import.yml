@@ -7,6 +7,14 @@
     value: '{{ iargs.value|combine({"depends_on":[]}) }}'
   when: '"d" in iay_fields[iargs.type]'
 
+- name: 'Write output.{{ n }}.tf.json file.'
+  copy:
+    content: '{{ yaml|to_nice_json }}'
+    dest: '{{ path }}/output.{{ n }}.tf.json'
+  vars:
+    yaml:
+      output: '{{ { o: { "value" : iargs.id } } }}'
+
 - shell: 'echo +mv {{ file }}.bak {{ file }} >> terraform.log'
   args:
     chdir: '{{ path }}'
@@ -16,14 +24,6 @@
     - 'output'
   vars:
     file: '{{ item }}.{{ n }}.tf.json'
-
-- name: 'Write output.{{ n }}.tf.json file.'
-  copy:
-    content: '{{ yaml|to_nice_json }}'
-    dest: '{{ path }}/output.{{ n }}.tf.json'
-  vars:
-    yaml:
-      output: '{{ { o: { "value" : iargs.id } } }}'
 
 - shell: '( set -x ; terraform refresh -no-color ) 2>&1 | tee -a terraform.log'
   args:
