@@ -29,5 +29,5 @@ galaxy_info:
 dependencies:
   - name: 'terraform'
     scm: 'git'
-    src: 'git@github.helix.gsa.gov:GSASecOps/ansible-terraform.git'
+    src: 'git@github.com:andrewrothstein/ansible-terraform.git'
     version: 'master'
