@@ -65,8 +65,6 @@ BSD
 Author Information
 ------------------
 
-Robert August Vincent II  
+[Robert August Vincent II](https://github.com/pillarsdotnet) 
 *(pronounced "Bob" or "Bob-Vee")*  
-Office of the Chief Information Security Officer  
-U.S. General Services Administration  
-Contractor - Team Valiant  
+
