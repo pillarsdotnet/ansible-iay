@@ -65,6 +65,6 @@ BSD
 Author Information
 ------------------
 
-[Robert August Vincent II](https://github.com/pillarsdotnet) 
+[Robert August Vincent II](https://github.com/pillarsdotnet)  
 *(pronounced "Bob" or "Bob-Vee")*  
 
