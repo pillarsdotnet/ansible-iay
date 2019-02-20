@@ -7,6 +7,18 @@
     value: '{{ iargs.value|combine({"depends_on":[]}) }}'
   when: '"d" in iay_fields[iargs.type]'
 
+- include_tasks: 'terraform_write.yml'
+  vars:
+    file: 'local.{{ iargs.type }}.{{ iargs.key }}'
+    irepl: '{{ iargs.type }}_{{ iargs.key }}_'
+    keys: '{{ iargs.value.keys()
+              |map("regex_replace","^",irepl)
+              |list }}'
+    locals: '{{ dict(keys|zip(iargs.value.values()))
+                |combine({ "place": "holder" }) }}'
+    terraform:
+      locals: '{{ locals }}'
+
 - name: 'Write output.{{ n }}.tf.json file.'
   copy:
     content: '{{ yaml|to_nice_json }}'
@@ -21,6 +33,7 @@
     removes: '{{ file }}'
   loop:
     - 'data'
+    - 'local'
     - 'output'
   vars:
     file: '{{ item }}.{{ n }}.tf.json'
@@ -37,6 +50,7 @@
     removes: '{{ file }}'
   loop:
     - 'data'
+    - 'local'
     - 'output'
   vars:
     file: '{{ item }}.{{ n }}.tf.json'
