@@ -10,7 +10,7 @@
   loop: '{{ value|dict2items }}'
   vars:
     srch: '\+{{ item.key }}(?![A-Za-z_])'
-    repl: '{{ item.value|string|to_json }}'
+    repl: '{{ item.value|to_json }}'
 
 - name: 'Finish interpolating import id for data.'
   set_fact:
