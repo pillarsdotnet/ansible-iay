@@ -86,9 +86,9 @@
                 policy: '${data.aws_iam_policy_document.backend.json}'
                 server_side_encryption_configuration:
                   rule:
-                    apply_server_side_encryption_by_default:
-                      kms_master_key_id: '${aws_kms_key.backend.arn}'
-                      sse_algorithm: 'aws:kms'
+                    - apply_server_side_encryption_by_default:
+                        kms_master_key_id: '${aws_kms_key.backend.arn}'
+                        sse_algorithm: 'aws:kms'
                 versioning:
                   enabled: true
   vars:
