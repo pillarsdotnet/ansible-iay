@@ -6,12 +6,27 @@
 
 - name: 'Loop through value fields to interpolate import id.'
   set_fact:
-    id: '{{ id|regex_replace("\$\{\+"+item.key+"\}",item.value|string) }}'
+    id: '{{ id|regex_replace(srch,repl) }}'
   loop: '{{ value|dict2items }}'
+  vars:
+    srch: '\+{{ item.key }}(?![A-Za-z_])'
+    repl: '{{ item.value|string|to_json }}'
 
-- name: 'Finish interpolating import id.'
+- name: 'Finish interpolating import id for data.'
   set_fact:
-    id: '{{ id|regex_replace("\$\{\+","${data."+type+"."+key+".") }}'
+    id: '{{ id|regex_replace(srch, repl) }}'
+  vars:
+    srch: '\+'
+    repl: 'data.{{ type }}.{{ key }}.'
+  when: '"d" in iay_fields[type]'
+
+- name: 'Finish interpolating import id for no data.'
+  set_fact:
+    id: '{{ id|regex_replace(srch, repl) }}'
+  vars:
+    srch: '\+[A-Za-z_]+'
+    repl: '""'
+  when: '"d" not in iay_fields[type]'
 
 - name: 'Add {{ type }}.{{ key }} to imports list.'
   set_fact:
