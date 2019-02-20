@@ -15,7 +15,7 @@
     yaml:
       output: '{{ { o: { "value" : iargs.id } } }}'
 
-- shell: 'echo +mv {{ file }}.bak {{ file }} >> terraform.log'
+- shell: 'echo + mv {{ file }}.bak {{ file }} >> terraform.log'
   args:
     chdir: '{{ path }}'
     removes: '{{ file }}'
