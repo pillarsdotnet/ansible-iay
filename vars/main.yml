@@ -252,6 +252,38 @@ iay_fields:
       - 'storage_encrypted'
       - 'tags'
       - 'vpc_security_group_ids'
+  aws_route53_record:
+    +i: '${+zone_id}_${+name}_${+type}_${+set_identifier}'
+    r:
+      - 'alias'
+      - 'allow_overwrite'
+      - 'failover_routing_policy'
+      - 'geolocation_routing_policy'
+      - 'health_check_id'
+      - 'latency_routing_policy'
+      - 'multivalue_answer_routing_policy'
+      - 'name'
+      - 'records'
+      - 'set_identifier'
+      - 'ttl'
+      - 'type'
+      - 'weighted_routing_policy'
+      - 'zone_id'
+  aws_route53_zone:
+    +i: '${+zone_id}'
+    d:
+      - 'name'
+      - 'private_zone'
+      - 'tags'
+      - 'vpc_id'
+      - 'zone_id'
+    r:
+      - 'comment'
+      - 'delegation_set_id'
+      - 'force_destroy'
+      - 'name'
+      - 'tags'
+      - 'vpc'
   aws_s3_bucket:
     +i: '${+bucket}'
     d:
@@ -282,14 +314,28 @@ iay_fields:
       - 'tags'
       - 'vpc_id'
     r:
+      - 'description'
+      - 'egress'
+      - 'ingress'
       - 'name'
       - 'name_prefix'
-      - 'description'
-      - 'ingress'
-      - 'egress'
       - 'revoke_rules_on_delete'
-      - 'vpc_id'
       - 'tags'
+      - 'vpc_id'
+  aws_security_group_rule:
+    +i: '${+security_group_id}_${+type}_${+protocol}_${+from_port}_${+to_port}_${coalesce(+cidr_blocks,+source_security_group_id)}'
+    r:
+      - 'cidr_blocks'
+      - 'description'
+      - 'from_port'
+      - 'ipv6_cidr_blocks'
+      - 'prefix_list_ids'
+      - 'protocol'
+      - 'security_group_id'
+      - 'self'
+      - 'source_security_group_id'
+      - 'to_port'
+      - 'type'
   aws_subnet:
     +i: '${+id}'
     d:
