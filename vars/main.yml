@@ -277,7 +277,7 @@ iay_fields:
       - 'publicly_accessible'
       - 'tags'
   aws_route53_record:
-    +i: '${+zone_id}_${+name}_${+type}_${+set_identifier}'
+    +i: '${join("_",compact(list(+zone_id,+name,+type,+set_identifier)))}'
     r:
       - 'alias'
       - 'allow_overwrite'
