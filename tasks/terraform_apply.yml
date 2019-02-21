@@ -1,8 +1,13 @@
 ---
 
-- shell: '( set -x ; terraform init -no-color ) >> terraform.log 2>&1'
+- shell: '( set -x ; terraform init -no-color ) >terraform.log 2>&1'
   args:
     chdir: '{{ path }}'
+
+- shell: '( set -x ; terraform state list ) 2>&1 | tee -a terraform.log'
+  args:
+    chdir: '{{ path }}'
+  register: 'iay_state'
 
 - include_tasks: 'terraform_import.yml'
   loop: '{{ iay_imports }}'
@@ -11,12 +16,14 @@
   vars:
     n: '{{ iargs.type }}.{{ iargs.key }}'
     o: '{{ iargs.type }}_{{ iargs.key }}'
+  when: 'n not in iay_state.stdout_lines|default([])'
 
 - set_fact:
     iay_imports: []
 
-- shell: '( set -x ; terraform {{ action }} -auto-approve=true
-            -input=false -lock=true -no-color ) >> terraform.log 2>&1'
+- shell: '( set -x ; terraform plan -no-color ;
+            terraform {{ action }} -auto-approve=true -input=false
+            -lock=true -no-color ) >>terraform.log 2>&1'
   args:
     chdir: '{{ path }}'
   async: '{{ iay_async_timeout }}'

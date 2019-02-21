@@ -27,7 +27,7 @@
     yaml:
       output: '{{ { o: { "value" : iargs.id } } }}'
 
-- shell: 'echo + mv {{ file }}.bak {{ file }} >> terraform.log'
+- shell: 'echo + mv {{ file }}.bak {{ file }} >>terraform.log'
   args:
     chdir: '{{ path }}'
     removes: '{{ file }}'
@@ -44,7 +44,7 @@
   ignore_errors: true
   register: 'refresh'
 
-- shell: '( set -x ; mv {{ file }} {{ file }}.bak ) >> terraform.log 2>&1'
+- shell: '( set -x ; mv {{ file }} {{ file }}.bak ) >>terraform.log 2>&1'
   args:
     chdir: '{{ path }}'
     removes: '{{ file }}'
@@ -57,7 +57,7 @@
     
 - shell: '( set -x ; sh -c "while terraform state list | grep -q {{ n }} ;
             do terraform state rm {{ n }} ; done" ;
-            terraform import -no-color {{ n }} {{ i }} ) >> terraform.log 2>&1'
+            terraform import -no-color {{ n }} {{ i }} ) >>terraform.log 2>&1'
   args:
     chdir: '{{ path }}'
   failed_when: false

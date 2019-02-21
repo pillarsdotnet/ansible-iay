@@ -25,19 +25,6 @@
         - include_tasks: 'terraform_apply.yml'
           vars:
             action: '{{ iay_action }}'
-          
-        - include_tasks: 'datatype_del.yml'
-          loop: '{{ s3_data|dict2items }}'
-          loop_control:
-            loop_var: 'd'
-          vars:
-            datas: '{{ d.value }}'
-            type: '{{ provider }}_{{ d.key }}'
-
-        - include_tasks: 'resourcegroup_del.yml'
-          loop: '{{ s3_resource }}'
-          loop_control:
-            loop_var: 'group'
 
       vars:
         s3_data:
@@ -74,7 +61,6 @@
                 id: '${aws_kms_alias.backend.target_key_id}'
             s3_bucket:
               backend:
-                acl: 'private'
                 bucket: '{{ backend.head }}'
                 encrypt: true
                 force_destroy: true
@@ -83,7 +69,6 @@
                   enabled: true
                 noncurrent_version_expiration:
                   days: '{{ iay_backend_expire }}'
-                policy: '${data.aws_iam_policy_document.backend.json}'
                 server_side_encryption_configuration:
                   rule:
                     - apply_server_side_encryption_by_default:
@@ -91,6 +76,11 @@
                         sse_algorithm: 'aws:kms'
                 versioning:
                   enabled: true
+            s3_bucket_policy:
+              backend:
+                bucket: '{{ backend.head }}'
+                policy: '${data.aws_iam_policy_document.backend.json}'
+
   vars:
     account:
       principals:
@@ -125,6 +115,13 @@
       - 's3:PutObject'
 
 - block:
+    
+    - name: 'Remove backend temp files.'
+      file:
+        path: '{{ item }}'
+        state: 'absent'
+      loop: '{{ lookup("fileglob", path + "/terraform.tfstate*"     , wantlist=true)
+         |union(lookup("fileglob", path + "/*aws_*.backend.tf.json*", wantlist=true)) }}'
 
     - include_tasks: 'terraform_write.yml'
       vars:
@@ -137,11 +134,5 @@
                 dynamodb_table: '{{ backend.head }}'
                 key: '{{ backend.tail }}'
                 region: '{{ p.value.region|default(aws_region) }}'
-    
-    - name: 'Remove old state files.'
-      file:
-        path: '{{ item }}'
-        state: 'absent'
-      loop: '{{ lookup("fileglob", path + "/terraform.tfstate*", wantlist=true) }}'
 
   when: 'iay_action == "apply"'

@@ -23,9 +23,9 @@
       vars:
         action: '{{ iay_action }}'
 
-    - file:
-        path: '{{ path }}'
-        state: 'absent'
+    #- file:
+    #    path: '{{ path }}'
+    #    state: 'absent'
 
   vars:
     path: '{{ iay_tempdir.path }}'

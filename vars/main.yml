@@ -329,6 +329,11 @@ iay_fields:
       - 'tags'
       - 'versioning'
       - 'website'
+  aws_s3_bucket_policy:
+    +i: '${bucket}'
+    r:
+      - 'bucket'
+      - 'policy'
   aws_security_group:
     +i: '${+id}'
     d:
@@ -347,7 +352,7 @@ iay_fields:
       - 'tags'
       - 'vpc_id'
   aws_security_group_rule:
-    +i: '${+security_group_id}_${+type}_${+protocol}_${+from_port}_${+to_port}_${coalesce(join("_",+cidr_blocks),+source_security_group_id)}'
+    +i: '${join("_",compact(flatten(list(+security_group_id,+type,+protocol,+from_port,+to_port,cidr_blocks,+source_security_group_id))))}'
     r:
       - 'cidr_blocks'
       - 'description'

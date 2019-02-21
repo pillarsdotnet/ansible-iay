@@ -1,9 +1,0 @@
----
-
-- include_tasks: 'resourcetype_del.yml'
-  loop: '{{ group|dict2items }}'
-  loop_control:
-    loop_var: 'r'
-  vars:
-    resources: '{{ r.value }}'
-    type: '{{ provider }}_{{ r.key }}'
