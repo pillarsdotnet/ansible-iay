@@ -23,14 +23,13 @@
 - block:
 
     - include_tasks: 'providers_add.yml'
-      loop: '{{ iay|dict2items }}'
+      loop: '{{ iay|default({}, true)|dict2items }}'
       loop_control:
         loop_var: 'p'
 
     - include_tasks: 'terraform_apply.yml'
       vars:
         action: '{{ iay_action }}'
-
 
     - name: 'Retrieve final terraform state.'
       shell: 'terraform state pull'

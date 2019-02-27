@@ -6,7 +6,7 @@
     value: '{{ p.value }}'
 
 - include_tasks: 'backend_{{ b.key }}.yml'
-  loop: '{{ p.value.backend|default({})|dict2items }}'
+  loop: '{{ p.value.backend|default({}, true)|dict2items }}'
   loop_control:
     loop_var: 'b'
   vars:
@@ -17,7 +17,7 @@
     provider: '{{ p.key }}'
 
 - include_tasks: 'datatype_add.yml'
-  loop: '{{ p.value.data|dict2items }}'
+  loop: '{{ p.value.data|default({}, true)|dict2items }}'
   loop_control:
     loop_var: 'd'
   vars:
