@@ -36,7 +36,7 @@
       shell: 'terraform state pull'
       args:
         chdir: '{{ path }}'
-      register: '{{ iay_state }}'
+      register: 'iay_state'
 
     - name: 'Parse json from terraform state.'
       set_fact:
