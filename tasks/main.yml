@@ -9,8 +9,15 @@
 
 - name: 'Make temp directory for terraform run.'
   tempfile:
+    path: '{{ iay_tempdir.path|default(omit) }}'
+    prefix: '{{ iay_tempdir.prefix|default(omit) }}'
     state: 'directory'
+    suffix: '{{ iay_tempdir.suffix|default(omit) }}'
   register: 'iay_tempdir'
+  when: 'iay_tempdir is not defined
+      or iay_tempdir.path is not defined
+      or iay_tempdir.persist is not defined
+      or not iay_tempdir.persist'
 
 - block:
 
@@ -23,9 +30,10 @@
       vars:
         action: '{{ iay_action }}'
 
-    #- file:
-    #    path: '{{ path }}'
-    #    state: 'absent'
+    - file:
+        path: '{{ path }}'
+        state: 'absent'
+      when: 'not iay_tempdir.persist|default(false)'
 
   vars:
     path: '{{ iay_tempdir.path }}'
