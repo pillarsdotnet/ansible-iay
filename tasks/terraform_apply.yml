@@ -28,3 +28,13 @@
     chdir: '{{ path }}'
   async: '{{ iay_async_timeout }}'
   poll: '{{ iay_async_poll }}'
+
+- name: 'Retrieve final terraform state.'
+  shell: 'terraform state pull'
+  args:
+    chdir: '{{ path }}'
+  register: '{{ iay_state }}'
+
+- name: 'Parse json from terraform state.'
+  set_fact:
+    iay_state: '{{ iay_state.stdout|from_json }}'
