@@ -31,6 +31,17 @@
       vars:
         action: '{{ iay_action }}'
 
+
+    - name: 'Retrieve final terraform state.'
+      shell: 'terraform state pull'
+      args:
+        chdir: '{{ path }}'
+      register: '{{ iay_state }}'
+
+    - name: 'Parse json from terraform state.'
+      set_fact:
+        iay_state: '{{ iay_state.stdout|from_json }}'
+
     - file:
         path: '{{ path }}'
         state: 'absent'
