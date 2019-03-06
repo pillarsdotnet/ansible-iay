@@ -27,7 +27,8 @@
     yaml:
       output: '{{ { o: { "value" : iargs.id } } }}'
 
-- shell: 'echo + mv {{ file }}.bak {{ file }} >>terraform.log'
+- name: 'mv {{ file }}.bak {{file }}'
+  shell: 'echo + mv {{ file }}.bak {{ file }} >>terraform.log'
   args:
     chdir: '{{ path }}'
     removes: '{{ file }}'
@@ -38,13 +39,15 @@
   vars:
     file: '{{ item }}.{{ n }}.tf.json'
 
-- shell: '( set -x ; terraform refresh -no-color ) 2>&1 | tee -a terraform.log'
+- name: 'terraform refresh'
+  shell: '( set -x ; terraform refresh -no-color ) 2>&1 | tee -a terraform.log'
   args:
     chdir: '{{ path }}'
   ignore_errors: true
   register: 'refresh'
 
-- shell: '( set -x ; mv {{ file }} {{ file }}.bak ) >>terraform.log 2>&1'
+- name: 'mv {{ file }} {{ file }}.bak'
+  shell: '( set -x ; mv {{ file }} {{ file }}.bak ) >>terraform.log 2>&1'
   args:
     chdir: '{{ path }}'
     removes: '{{ file }}'
@@ -55,7 +58,8 @@
   vars:
     file: '{{ item }}.{{ n }}.tf.json'
     
-- shell: '( set -x ; sh -c "while terraform state list | grep -q {{ n }} ;
+- name: 'terraform import {{ n }} {{ i }}'
+  shell: '( set -x ; sh -c "while terraform state list | grep -q {{ n }} ;
             do terraform state rm {{ n }} ; done" ;
             terraform import -no-color {{ n }} {{ i }} ) >>terraform.log 2>&1'
   args:

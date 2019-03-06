@@ -1,0 +1,14 @@
+---
+
+- shell: 'tail -n +{{ iay_watch_l }} {{ file }}'
+  register: 'iay_watch'
+
+- set_fact:
+    iay_watch_l: '{{ iay_watch_l + iay_watch.stdout_lines|length }}'
+
+- debug:
+    var: 'iay_watch.stdout_lines'
+
+- async_status:
+    jid: '{{ jid }}'
+  register: 'iay_watch'

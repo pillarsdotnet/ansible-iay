@@ -1,10 +1,12 @@
 ---
 
-- shell: '( set -x ; terraform init -no-color ) >terraform.log 2>&1'
+- name: 'terraform init'
+  shell: '( set -x ; terraform init -no-color ) >terraform.log 2>&1'
   args:
     chdir: '{{ path }}'
 
-- shell: '( set -x ; terraform state list ) 2>&1 | tee -a terraform.log'
+- name: 'terraform state list'
+  shell: '( set -x ; terraform state list ) 2>&1 | tee -a terraform.log'
   args:
     chdir: '{{ path }}'
   register: 'iay_state'
@@ -21,10 +23,17 @@
 - set_fact:
     iay_imports: []
 
-- shell: '( set -x ; terraform plan -no-color ;
+- name: 'terraform {{ action }}'
+  shell: '( set -x ; terraform plan -no-color ;
             terraform {{ action }} -auto-approve=true -input=false
             -lock=true -no-color ) >>terraform.log 2>&1'
   args:
     chdir: '{{ path }}'
   async: '{{ iay_async_timeout }}'
-  poll: '{{ iay_async_poll }}'
+  poll: 0
+  register: 'iay_async'
+
+- include_tasks: 'watch.yml'
+  vars:
+    file: '{{ path }}/terraform.log'
+    jid: '{{ iay_async.ansible_job_id }}'
