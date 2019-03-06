@@ -15,5 +15,7 @@
   when: 'iay_watch.stdout_lines|default([])|length > 0'
 
 - async_status:
-    jid: '{{ jid }}'
+    jid: '{{ job.ansible_job_id }}'
   register: 'iay_watch'
+  vars:
+    job: '{{ lookup("vars", iay_watch_j) }}'

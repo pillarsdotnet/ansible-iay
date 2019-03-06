@@ -4,6 +4,14 @@
   shell: '( set -x ; terraform init -no-color ) >terraform.log 2>&1'
   args:
     chdir: '{{ path }}'
+  async: '{{ iay_async_timeout }}'
+  poll: 0
+  register: 'iay_async'
+
+- include_tasks: 'watch.yml'
+  vars:
+    file: '{{ path }}/terraform.log'
+    job: 'iay_async'
 
 - name: 'terraform state list'
   shell: '( set -x ; terraform state list ) 2>&1 | tee -a terraform.log'
@@ -12,13 +20,18 @@
   register: 'iay_state'
 
 - include_tasks: 'terraform_import.yml'
+  async: '{{ iay_async_timeout }}'
   loop: '{{ iay_imports }}'
   loop_control:
     loop_var: 'iargs'
+  poll: 0
+  register: 'iay_async'
   vars:
     n: '{{ iargs.type }}.{{ iargs.key }}'
     o: '{{ iargs.type }}_{{ iargs.key }}'
   when: 'n not in iay_state.stdout_lines|default([])'
+
+- include_tasks: 'watch_again.yml'
 
 - set_fact:
     iay_imports: []
@@ -33,7 +46,4 @@
   poll: 0
   register: 'iay_async'
 
-- include_tasks: 'watch.yml'
-  vars:
-    file: '{{ path }}/terraform.log'
-    jid: '{{ iay_async.ansible_job_id }}'
+- include_tasks: 'watch_again.yml'

@@ -1,9 +1,8 @@
 ---
 
 - set_fact:
+    iay_watch_f: '{{ file }}'
+    iay_watch_j: '{{ job }}'
     iay_watch_l: 0
 
-- include_tasks: 'watch_loop.yml'
-  delay: '{{ iay_async_poll }}'
-  retries: '{{ iay_async_timeout // iay_async_poll  }}'
-  until: 'iay_watch is finished'
+- include_tasks: 'watch_again.yml'

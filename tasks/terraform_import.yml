@@ -27,7 +27,7 @@
     yaml:
       output: '{{ { o: { "value" : iargs.id } } }}'
 
-- name: 'mv {{ file }}.bak {{file }}'
+- name: 'Create import files.'
   shell: 'echo + mv {{ file }}.bak {{ file }} >>terraform.log'
   args:
     chdir: '{{ path }}'
@@ -46,7 +46,7 @@
   ignore_errors: true
   register: 'refresh'
 
-- name: 'mv {{ file }} {{ file }}.bak'
+- name: 'Rename import files.'
   shell: '( set -x ; mv {{ file }} {{ file }}.bak ) >>terraform.log 2>&1'
   args:
     chdir: '{{ path }}'
@@ -58,15 +58,20 @@
   vars:
     file: '{{ item }}.{{ n }}.tf.json'
     
-- name: 'terraform import {{ n }} {{ i }}'
-  shell: '( set -x ; sh -c "while terraform state list | grep -q {{ n }} ;
-            do terraform state rm {{ n }} ; done" ;
-            terraform import -no-color {{ n }} {{ i }} ) >>terraform.log 2>&1'
-  args:
-    chdir: '{{ path }}'
-  failed_when: false
-  ignore_errors: true
-  register: 'result'
+- block:
+
+    - name: 'terraform import {{ n }} {{ i }}'
+      shell: '( set -x ;
+                sh -c "while terraform state list | grep -q {{ n }} ;
+                do terraform state rm {{ n }} ; done" ;
+                terraform import -no-color {{ n }} {{ i }} )
+                >>terraform.log 2>&1'
+      args:
+        chdir: '{{ path }}'
+      failed_when: false
+      ignore_errors: true
+      register: 'result'
+
   vars:
     i: '{{ refresh.stdout_lines
           |map("regex_search","^" + o + " = .*")
