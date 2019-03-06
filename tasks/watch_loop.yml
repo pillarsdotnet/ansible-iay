@@ -19,3 +19,4 @@
   register: 'iay_watch'
   vars:
     job: '{{ lookup("vars", iay_watch_j) }}'
+  when: 'job.ansible_job_id is defined'
