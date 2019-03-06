@@ -1,6 +1,6 @@
 ---
 
-- shell: 'tail -n +{{ iay_watch_l }} {{ file }}'
+- shell: 'tail -n +{{ iay_watch_l }} {{ iay_watch_f }}'
   register: 'iay_watch'
 
 - block:
