@@ -3,11 +3,16 @@
 - shell: 'tail -n +{{ iay_watch_l }} {{ file }}'
   register: 'iay_watch'
 
-- set_fact:
-    iay_watch_l: '{{ iay_watch_l + iay_watch.stdout_lines|length }}'
+- block:
 
-- debug:
-    var: 'iay_watch.stdout_lines'
+    - set_fact:
+        iay_watch_l: '{{ iay_watch_l
+                       + iay_watch.stdout_lines|length }}'
+
+    - debug:
+        var: 'iay_watch.stdout_lines'
+
+  when: 'iay_watch.stdout_lines|default([])|length > 0'
 
 - async_status:
     jid: '{{ jid }}'
