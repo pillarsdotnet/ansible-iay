@@ -3,7 +3,6 @@
 galaxy_info:
   author: 'Robert Vincent'
   description: 'Infrastructure As Yaml'
-  company: 'Valiant Solutions, LLC'
   license:
     - BSD
   min_ansible_version: 2.4
