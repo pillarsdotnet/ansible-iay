@@ -330,7 +330,7 @@ iay_fields:
       - 'versioning'
       - 'website'
   aws_s3_bucket_policy:
-    +i: '${bucket}'
+    +i: '${+bucket}'
     r:
       - 'bucket'
       - 'policy'
