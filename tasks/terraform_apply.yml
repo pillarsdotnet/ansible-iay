@@ -38,9 +38,8 @@
     iay_imports: []
 
 - name: 'terraform {{ action }}'
-  shell: '( set -x ; terraform plan -no-color ;
-            terraform {{ action }} -auto-approve=true -input=false
-            -lock={{ lock }} -no-color ) >>terraform.log 2>&1'
+  shell: '( set -x ; terraform {{ action }} -auto-approve=true
+            -input=false -lock={{ lock }} -no-color ) >>terraform.log 2>&1'
   args:
     chdir: '{{ path }}'
   async: '{{ iay_async_timeout }}'
