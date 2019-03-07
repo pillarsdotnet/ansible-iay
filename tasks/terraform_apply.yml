@@ -43,6 +43,7 @@
   args:
     chdir: '{{ path }}'
   async: '{{ iay_async_timeout }}'
+  failed_when: false
   poll: 0
   register: 'iay_async'
 
