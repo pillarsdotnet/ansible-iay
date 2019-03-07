@@ -1,6 +1,0 @@
----
-
-- include_tasks: 'watch_loop.yml'
-  delay: '{{ iay_async_poll }}'
-  retries: '{{ iay_async_timeout // iay_async_poll  }}'
-  until: 'iay_watch is finished or iay_watch is skipped'

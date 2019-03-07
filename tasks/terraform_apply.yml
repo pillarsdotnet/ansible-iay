@@ -8,10 +8,8 @@
   poll: 0
   register: 'iay_async'
 
-- include_tasks: 'watch.yml'
-  vars:
-    file: '{{ path }}/terraform.log'
-    job: 'iay_async'
+- include_role:
+    name: 'watch'
 
 - name: 'terraform state list'
   shell: '( set -x ; terraform state list ) 2>&1 | tee -a terraform.log'
@@ -31,7 +29,9 @@
     o: '{{ iargs.type }}_{{ iargs.key }}'
   when: 'n not in iay_state.stdout_lines|default([])'
 
-- include_tasks: 'watch_again.yml'
+- include_role:
+    name: 'watch'
+    tasks_from: 'again'
 
 - set_fact:
     iay_imports: []
@@ -46,4 +46,6 @@
   poll: 0
   register: 'iay_async'
 
-- include_tasks: 'watch_again.yml'
+- include_role:
+    name: 'watch'
+    tasks_from: 'again'

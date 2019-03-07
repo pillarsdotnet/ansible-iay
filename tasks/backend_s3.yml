@@ -84,6 +84,8 @@
                 depends_on:
                   - 'aws_s3_bucket.backend'
                 policy: '${data.aws_iam_policy_document.backend.json}'
+        watch_file: '{{ path }}/terraform.log'
+        watch_job: 'iay_async'
 
   vars:
     account:
