@@ -55,7 +55,7 @@ TBD
 To-Do
 -----
 
-TBD
+Lots of aws types (not to mention other cloud providers) need to be added to [vars](vars/main.yml).
 
 License
 -------
