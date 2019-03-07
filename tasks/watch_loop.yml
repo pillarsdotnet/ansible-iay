@@ -6,8 +6,9 @@
 - block:
 
     - set_fact:
-        iay_watch_l: '{{ iay_watch_l
-                       + iay_watch.stdout_lines|length }}'
+        iay_watch_l: '{{ iay_watch_l|int
+                       + iay_watch.stdout_lines
+                       |default([])|length }}'
 
     - debug:
         var: 'iay_watch.stdout_lines'
