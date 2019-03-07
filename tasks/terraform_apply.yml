@@ -37,6 +37,11 @@
 - set_fact:
     iay_imports: []
 
+- name: 'terraform refresh'
+  shell: '( set -x terraform refresh -no-color ) >>terraform.log 2>&1'
+  args:
+    chdir: '{{ path }}'
+
 - name: 'terraform {{ action }}'
   shell: '( set -x ; terraform {{ action }} -auto-approve=true
             -input=false -lock={{ lock }} -no-color ) >>terraform.log 2>&1'
