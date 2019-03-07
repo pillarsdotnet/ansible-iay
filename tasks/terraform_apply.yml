@@ -5,6 +5,7 @@
   args:
     chdir: '{{ path }}'
   async: '{{ iay_async_timeout }}'
+  failed_when: false
   poll: 0
   register: 'iay_async'
 
@@ -39,13 +40,15 @@
 - name: 'terraform {{ action }}'
   shell: '( set -x ; terraform plan -no-color ;
             terraform {{ action }} -auto-approve=true -input=false
-            -lock=true -no-color ) >>terraform.log 2>&1'
+            -lock={{ lock }} -no-color ) >>terraform.log 2>&1'
   args:
     chdir: '{{ path }}'
   async: '{{ iay_async_timeout }}'
   failed_when: false
   poll: 0
   register: 'iay_async'
+  vars:
+    lock: '{{ "true" if action == "apply" else "false" }}'
 
 - include_role:
     name: 'watch'
