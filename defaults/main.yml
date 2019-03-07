@@ -4,8 +4,12 @@ aws_account: '{{ ansible_ec2_instance_identity_document_accountid }}'
 
 iay_action: 'apply'
 
-iay_async_poll: 5
+iay_async_poll: 1
 
 iay_async_timeout: 1800
 
 iay_backend_expire: 90
+
+watch_job: 'iay_async'
+
+watch_timeout: '{{ iay_async_timeout }}'

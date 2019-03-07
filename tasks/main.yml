@@ -30,8 +30,6 @@
     - include_tasks: 'terraform_apply.yml'
       vars:
         action: '{{ iay_action }}'
-        watch_file: '{{ path }}/terraform.log'
-        watch_job: 'iay_async'
 
     - name: 'Retrieve final terraform state.'
       shell: 'terraform state pull'
@@ -50,3 +48,4 @@
 
   vars:
     path: '{{ iay_tempdir.path }}'
+    watch_file: '{{ path }}/terraform.log'
